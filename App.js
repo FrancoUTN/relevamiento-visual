@@ -1,20 +1,41 @@
+import { useContext } from "react";
+import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
+import AnimatedSplashScreen from "./src/components/inicio/AnimatedSplashScreen";
+import { Contexto, ContextoProvider } from './src/store/Contexto';
+import { AuthenticatedStack, AuthStack } from "./src/components/inicio/Stacks";
+
+// Inicializar App y Auth
+import './src/util/auth'
+
+
+function Navigation() {
+  const ctx = useContext(Contexto);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      {!ctx.email && <AuthStack />}
+      {!!ctx.email && <AuthenticatedStack />}
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <>
+      <StatusBar style="light" />
+      <AnimatedSplashScreen image={require('./assets/splash.png')}>
+        <MainScreen />
+      </AnimatedSplashScreen>
+    </>
+  );
+}
+
+function MainScreen() {
+  return (
+    <ContextoProvider>
+      <Navigation />
+    </ContextoProvider>
+  );
+}
