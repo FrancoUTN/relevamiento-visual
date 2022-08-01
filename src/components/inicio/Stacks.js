@@ -52,18 +52,19 @@ export function AuthenticatedStack() {
 
   function opcionesSeccion({ route }) {
     return {
-      headerRight: funcionHeaderRight(route.params.cosas)
+      headerRight: funcionHeaderRight(route.params.funcion)
     };
   }
 
-  function funcionHeaderRight (cosas) {
+  function funcionHeaderRight (funcion) {
     return () => (
       <>
         <View style={{marginHorizontal: 30}} >
           <IconButton
-            icon={cosas}
+            icon='camera'
             color='white'
             size={28}
+            onPress={funcion}
           />
         </View>
         { logoutIcon }
