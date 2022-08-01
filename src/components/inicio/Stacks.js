@@ -6,6 +6,7 @@ import LoginScreen from '../../screens/LoginScreen';
 import BotonesScreen from '../../screens/BotonesScreen';
 import ModalScreen from "../../screens/ModalScreen";
 import { Contexto } from '../../store/Contexto';
+import IconButton from '../ui/IconButton';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +22,7 @@ export function AuthStack() {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ title: 'Inicio de sesión' }}
+        options={{ title: 'Inicia sesión' }}
       />
       <Stack.Group screenOptions={{
           presentation: 'modal',
@@ -51,14 +52,14 @@ export function AuthenticatedStack() {
         component={BotonesScreen}
         options={{
           title: 'Elegir sección',
-          // headerRight: ({ tintColor }) => (
-          //   <IconButton
-          //     icon="exit"
-          //     color={tintColor}
-          //     size={26}
-          //     onPress={contexto.logout}
-          //   />
-          // ),
+          headerRight: ({ tintColor }) => (
+            <IconButton
+              icon="exit"
+              color={tintColor}
+              size={26}
+              onPress={contexto.logout}
+            />
+          ),
         }}
       />
     </Stack.Navigator>

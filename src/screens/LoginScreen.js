@@ -1,9 +1,10 @@
 import { useContext, useState } from 'react';
 
-import AuthContent from '../components/Auth/AuthContent';
+import FormularioLogin from '../components/ui/FormularioLogin';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import { Contexto } from '../store/Contexto';
 import login from '../util/authentication';
+
 
 export default function LoginScreen({ navigation }) {
   const contexto = useContext(Contexto);
@@ -33,5 +34,7 @@ export default function LoginScreen({ navigation }) {
     return <LoadingOverlay message="Ingresando..." />;
   }
 
-  return <AuthContent isLogin onAuthenticate={loginHandler} />;
+  return <FormularioLogin></FormularioLogin>;
 }
+
+
