@@ -8,7 +8,7 @@ import ModalScreen from "../../screens/ModalScreen";
 import { Contexto } from '../../store/Contexto';
 import IconButton from '../ui/IconButton';
 import SeccionScreen from '../../screens/SeccionScreen';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +41,36 @@ export function AuthStack() {
 
 export function AuthenticatedStack() {
   const contexto = useContext(Contexto);
+  const logoutIcon = (
+    <IconButton
+      icon="power"
+      color='white'
+      size={24}
+      onPress={contexto.logout}
+    />
+  );
+
+  function opcionesSeccion({ route }) {
+    return {
+      headerRight: funcionHeaderRight(route.params.cosas)
+    };
+  }
+
+  function funcionHeaderRight (cosas) {
+    return () => (
+      <>
+        <View style={{marginHorizontal: 30}} >
+          <IconButton
+            icon={cosas}
+            color='white'
+            size={28}
+          />
+        </View>
+        { logoutIcon }
+      </>
+    );
+  }
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -54,44 +84,15 @@ export function AuthenticatedStack() {
         component={BotonesScreen}
         options={{
           title: 'Elegir sección',
-          headerRight: ({ tintColor }) => (
-            <IconButton
-              icon="exit"
-              color={tintColor}
-              size={26}
-              onPress={contexto.logout}
-            />
-          ),
+          headerRight: () => logoutIcon,
         }}
       />
       <Stack.Screen
         name="Seccion"
         component={SeccionScreen}
-        options={{
-          headerRight: ({ tintColor }) => (
-            <>
-              <View style={{
-                marginHorizontal: 40
-              }} >
-                <IconButton
-                  icon="camera-outline"
-                  color={tintColor}
-                  size={28}
-                  onPress={contexto.logout}
-                />
-              </View>
-              <View style={{
-              }} >
-                <IconButton
-                  icon="power"
-                  color={tintColor}
-                  size={24}
-                  onPress={contexto.logout}
-                />
-              </View>
-            </>
-          ),
-        }}
+        options={
+          opcionesSeccion
+        }
       />
     </Stack.Navigator>
   );

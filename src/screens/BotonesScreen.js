@@ -7,11 +7,11 @@ import { Colores } from '../constants/estilos';
 export default function BotonesScreen({ navigation }) {
 
   function onLindasPressHandler() {
-    navigation.navigate('Seccion', {'cosas': 'Lindas'});
+    navigation.navigate('Seccion', {'cosas': 'camera'});
   }
 
   function onFeasPressHandler() {
-    navigation.navigate('Seccion', {'cosas': 'Feas'});
+    navigation.navigate('Seccion', {'cosas': 'camera-outline'});
     
   }
 
