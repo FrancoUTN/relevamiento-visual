@@ -14,9 +14,9 @@ export function AuthStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        // headerStyle: { backgroundColor: Colores.primary500 },
-        // headerTintColor: 'white',
-        // contentStyle: { backgroundColor: Colors.primary100 },
+        headerStyle: { backgroundColor: Colores.primarioOscuro },
+        headerTintColor: 'white',
+        contentStyle: { backgroundColor: Colores.primarioMedio },
       }}
     >
       <Stack.Screen
@@ -25,7 +25,7 @@ export function AuthStack() {
         options={{ title: 'Inicia sesión' }}
       />
       <Stack.Group screenOptions={{
-          presentation: 'modal',
+          // presentation: 'modal',
           // headerStyle: { backgroundColor: Colors.error500 },
           // headerTintColor: 'white',
           // contentStyle: { backgroundColor: Colors.error100 },
@@ -42,9 +42,9 @@ export function AuthenticatedStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        // headerStyle: { backgroundColor: Colors.primary500 },
-        // headerTintColor: 'white',
-        // contentStyle: { backgroundColor: Colors.primary100 },
+        headerStyle: { backgroundColor: Colores.primarioOscuro },
+        headerTintColor: 'white',
+        contentStyle: { backgroundColor: Colores.primarioMedio },
       }}
     >
       <Stack.Screen

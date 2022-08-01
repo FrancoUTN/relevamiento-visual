@@ -25,7 +25,7 @@ export default function FormularioLogin({ onAuthenticate }) {
 
     if ( !emailIsValid || !passwordIsValid ) {      
       navigation.navigate({
-        name: 'MiModal',
+        name: 'Modal',
         params: { mensajeError: 'Datos inválidos.'}
       });
 
@@ -40,33 +40,59 @@ export default function FormularioLogin({ onAuthenticate }) {
     onAuthenticate({ email, password });
   }
 
-  function onPressItemHandler(name) {
-    switch (name) {
-      case 'admin':
-        setCorreo('admin@admin.com');
-        setClave('111111');
-        break;
-      case 'invitado':
-        setCorreo('invitado@invitado.com');
-        setClave('222222');
-        break;
-      case 'usuario':
-        setCorreo('usuario@usuario.com');
-        setClave('333333');
-        break;
-      case 'anonimo':
-        setCorreo('anonimo@anonimo.com');
-        setClave('444444');
-        break;
-      case 'tester':
-        setCorreo('tester@tester.com');
-        setClave('555555');
-        break;
-    }
+  function accesoAdminHandler() {
+    setCorreo('admin@admin.com');
+    setClave('111111');
+  }
+
+  function accesoInvitadoHandler() {
+    setCorreo('invitado@invitado.com');
+    setClave('222222');
+  }
+
+  function accesoUsuarioHandler() {
+    setCorreo('usuario@usuario.com');
+    setClave('333333');
+  }
+
+  function accesoAnonimoHandler() {
+    setCorreo('anonimo@anonimo.com');
+    setClave('444444');
+  }
+
+  function accesoTesterHandler() {
+    setCorreo('tester@tester.com');
+    setClave('555555');
   }
 
   return (
-    <View>
+    <View style={styles.container}>
+
+        <Text style={styles.ingresarComo}>
+            Ingresar como:
+        </Text>
+        <View style={styles.boton}>
+            <Button
+                onPress={accesoAdminHandler}
+                title='Administrador'
+                color={Colores.primarioOscuro}
+            />
+        </View>
+        <View style={styles.boton}>
+            <Button
+                onPress={accesoInvitadoHandler}
+                title='Invitado'
+                color={Colores.primarioOscuro}
+            />
+        </View>
+        <View style={styles.boton}>
+            <Button
+                onPress={accesoUsuarioHandler}
+                title='Usuario'
+                color={Colores.primarioOscuro}
+            />
+        </View>
+
         <View style={styles.inputContainer}>
             <Text style={[styles.label, credentialsInvalid.email && styles.labelInvalid]}>
                 Correo electrónico
@@ -101,25 +127,39 @@ export default function FormularioLogin({ onAuthenticate }) {
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    marginVertical: 8,
-  },
-  label: {
-    color: 'white',
-    marginBottom: 4,
-    fontSize: 18
-  },
-  labelInvalid: {
-    color: Colores.errorOscuro,
-  },
-  input: {
-    paddingVertical: 8,
-    paddingHorizontal: 6,
-    backgroundColor: Colores.primarioClaro,
-    borderRadius: 4,
-    fontSize: 20,
-  },
-  inputInvalid: {
-    backgroundColor: Colores.errorClaro,
-  },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    boton: {
+        margin: 6
+    },
+    ingresarComo: {
+        fontSize: 28,
+        color: 'white',
+        margin: 10
+    },
+    inputContainer: {
+        marginVertical: 8,
+        width: '60%'
+    },
+    label: {
+        color: 'white',
+        marginBottom: 4,
+        fontSize: 18
+    },
+    labelInvalid: {
+        color: Colores.errorOscuro,
+    },
+    input: {
+        paddingVertical: 8,
+        paddingHorizontal: 6,
+        backgroundColor: 'white',
+        borderRadius: 4,
+        fontSize: 20,
+    },
+    inputInvalid: {
+        backgroundColor: Colores.errorClaro,
+    },
 });
