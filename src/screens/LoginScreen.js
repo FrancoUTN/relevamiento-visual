@@ -34,7 +34,11 @@ export default function LoginScreen({ navigation }) {
     return <LoadingOverlay message="Ingresando..." />;
   }
 
-  return <FormularioLogin></FormularioLogin>;
+  return (
+    <FormularioLogin
+      onAuthenticate={loginHandler}
+    />
+  );
 }
 
 

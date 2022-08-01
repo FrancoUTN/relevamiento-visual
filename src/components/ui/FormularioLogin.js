@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Colores } from '../../constants/estilos';
 import { useNavigation } from '@react-navigation/native';
 
 
-export default function FormularioLogin({ isLogin, onAuthenticate }) {
-//   const navigation = useNavigation();
+export default function FormularioLogin({ onAuthenticate }) {
+  const navigation = useNavigation();
 
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     email: false,
@@ -16,56 +16,54 @@ export default function FormularioLogin({ isLogin, onAuthenticate }) {
   const [correo, setCorreo] = useState('');
   const [clave, setClave] = useState('');
 
-//   function submitHandler(credentials) {
-//     let { email, password } = credentials;
+  function submitHandler() {
+    email = correo.trim();
+    password = clave.trim();
 
-//     email = email.trim();
-//     password = password.trim();
+    const emailIsValid = email.includes('@');
+    const passwordIsValid = password.length >= 6;
 
-//     const emailIsValid = email.includes('@');
-//     const passwordIsValid = password.length >= 6;
+    if ( !emailIsValid || !passwordIsValid ) {      
+      navigation.navigate({
+        name: 'MiModal',
+        params: { mensajeError: 'Datos inválidos.'}
+      });
 
-//     if ( !emailIsValid || !passwordIsValid ) {      
-//       navigation.navigate({
-//         name: 'MiModal',
-//         params: { mensajeError: 'Datos inválidos.'}
-//       });
+      setCredentialsInvalid({
+        email: !emailIsValid,
+        password: !passwordIsValid
+      });
 
-//       setCredentialsInvalid({
-//         email: !emailIsValid,
-//         password: !passwordIsValid
-//       });
+      return;
+    }
 
-//       return;
-//     }
+    onAuthenticate({ email, password });
+  }
 
-//     onAuthenticate({ email, password });
-//   }
-
-//   function onPressItemHandler(name) {
-//     switch (name) {
-//       case 'admin':
-//         setCorreo('admin@admin.com');
-//         setClave('111111');
-//         break;
-//       case 'invitado':
-//         setCorreo('invitado@invitado.com');
-//         setClave('222222');
-//         break;
-//       case 'usuario':
-//         setCorreo('usuario@usuario.com');
-//         setClave('333333');
-//         break;
-//       case 'anonimo':
-//         setCorreo('anonimo@anonimo.com');
-//         setClave('444444');
-//         break;
-//       case 'tester':
-//         setCorreo('tester@tester.com');
-//         setClave('555555');
-//         break;
-//     }
-//   }
+  function onPressItemHandler(name) {
+    switch (name) {
+      case 'admin':
+        setCorreo('admin@admin.com');
+        setClave('111111');
+        break;
+      case 'invitado':
+        setCorreo('invitado@invitado.com');
+        setClave('222222');
+        break;
+      case 'usuario':
+        setCorreo('usuario@usuario.com');
+        setClave('333333');
+        break;
+      case 'anonimo':
+        setCorreo('anonimo@anonimo.com');
+        setClave('444444');
+        break;
+      case 'tester':
+        setCorreo('tester@tester.com');
+        setClave('555555');
+        break;
+    }
+  }
 
   return (
     <View>
@@ -90,6 +88,13 @@ export default function FormularioLogin({ isLogin, onAuthenticate }) {
                 onChangeText={setClave}
                 value={clave}
             />
+        </View>
+        <View>
+            <Button
+                onPress={submitHandler}
+                title='Acceder'
+            >
+            </Button>
         </View>
     </View>
   );
