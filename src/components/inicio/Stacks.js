@@ -8,6 +8,7 @@ import ModalScreen from "../../screens/ModalScreen";
 import { Contexto } from '../../store/Contexto';
 import IconButton from '../ui/IconButton';
 import SeccionScreen from '../../screens/SeccionScreen';
+import { View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -68,12 +69,27 @@ export function AuthenticatedStack() {
         component={SeccionScreen}
         options={{
           headerRight: ({ tintColor }) => (
-            <IconButton
-              icon="exit"
-              color={tintColor}
-              size={26}
-              onPress={contexto.logout}
-            />
+            <>
+              <View style={{
+                marginHorizontal: 40
+              }} >
+                <IconButton
+                  icon="camera-outline"
+                  color={tintColor}
+                  size={28}
+                  onPress={contexto.logout}
+                />
+              </View>
+              <View style={{
+              }} >
+                <IconButton
+                  icon="power"
+                  color={tintColor}
+                  size={24}
+                  onPress={contexto.logout}
+                />
+              </View>
+            </>
           ),
         }}
       />

@@ -1,10 +1,15 @@
+import { useEffect } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Colores } from '../constants/estilos';
 
 
-export default function SeccionScreen({ route }) {
+export default function SeccionScreen({ navigation, route }) {
     const cosas = route.params?.cosas;
+
+    useEffect(
+        () => navigation.setOptions({ title: cosas }),
+    []);
 
     return (
         <View style={styles.container}>
