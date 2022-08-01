@@ -7,6 +7,7 @@ import BotonesScreen from '../../screens/BotonesScreen';
 import ModalScreen from "../../screens/ModalScreen";
 import { Contexto } from '../../store/Contexto';
 import IconButton from '../ui/IconButton';
+import SeccionScreen from '../../screens/SeccionScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +53,20 @@ export function AuthenticatedStack() {
         component={BotonesScreen}
         options={{
           title: 'Elegir sección',
+          headerRight: ({ tintColor }) => (
+            <IconButton
+              icon="exit"
+              color={tintColor}
+              size={26}
+              onPress={contexto.logout}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Seccion"
+        component={SeccionScreen}
+        options={{
           headerRight: ({ tintColor }) => (
             <IconButton
               icon="exit"
