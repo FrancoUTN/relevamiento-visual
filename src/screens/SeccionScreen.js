@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { addDoc, collection, doc, getFirestore, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getFirestore, onSnapshot, orderBy, query, updateDoc, where } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import moment from 'moment';
@@ -17,6 +17,7 @@ export default function SeccionScreen({ navigation, route }) {
     const auth = getAuth();
     const email = auth.currentUser.email;
     const uid = auth.currentUser.uid;
+    const userRef = doc(getFirestore(), 'usuarios', uid);
 
     const cosas = route.params?.cosas;
     const sonLindas = cosas == 'Lindas';
@@ -29,8 +30,6 @@ export default function SeccionScreen({ navigation, route }) {
     []);
     
     useEffect(() => {
-        const userRef = doc(getFirestore(), 'usuarios', uid);
-
         const unsubscribe = onSnapshot(userRef, doc => {
             setUsuario(doc.data());
         });
@@ -96,9 +95,17 @@ export default function SeccionScreen({ navigation, route }) {
         addDoc(refFotos, foto);
     }
 
-    function onVotarHandler(id) {
-        // console.log(id);
-        console.log(usuario);
+    async function onVotarHandler(id) {
+        if (sonLindas) {
+            await updateDoc(userRef, {
+                masLinda: id
+            });
+        }
+        else {
+            await updateDoc(userRef, {
+                masFea: id
+            });
+        }
     }
 
     function formatDate(timestamp) {
