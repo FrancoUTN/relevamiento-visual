@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { addDoc, collection, doc, getFirestore, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import moment from 'moment';
@@ -16,16 +16,26 @@ import Publicacion from '../components/ui/Publicacion';
 export default function SeccionScreen({ navigation, route }) {
     const auth = getAuth();
     const email = auth.currentUser.email;
+    const uid = auth.currentUser.uid;
 
     const cosas = route.params?.cosas;
     const sonLindas = cosas == 'Lindas';
-    const [foto, setFoto] = useState();
+    const [usuario, setUsuario] = useState();
     const [fotos, setFotos] = useState([]);
     const [tomarFoto, setTomarFoto] = useState(false);
 
     useEffect(
         () => navigation.setOptions({ title: cosas }),
     []);
+    
+    useEffect(() => {
+        const userRef = doc(getFirestore(), 'usuarios', uid);
+
+        const unsubscribe = onSnapshot(userRef, doc => {
+            setUsuario(doc.data());
+        });
+        return unsubscribe;
+    }, []);
 
     useEffect(() => {
         const q = query(refFotos, orderBy("fecha", 'desc'));
@@ -87,7 +97,8 @@ export default function SeccionScreen({ navigation, route }) {
     }
 
     function onVotarHandler(id) {
-        console.log(id);
+        // console.log(id);
+        console.log(usuario);
     }
 
     function formatDate(timestamp) {
