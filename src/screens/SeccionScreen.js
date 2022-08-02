@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
@@ -16,6 +16,7 @@ export default function SeccionScreen({ navigation, route }) {
     const email = auth.currentUser.email;
 
     const cosas = route.params?.cosas;
+    const sonLindas = cosas == 'Lindas';
     const [foto, setFoto] = useState();
     const [fotos, setFotos] = useState([]);
     const [tomarFoto, setTomarFoto] = useState(false);
@@ -23,6 +24,31 @@ export default function SeccionScreen({ navigation, route }) {
     useEffect(
         () => navigation.setOptions({ title: cosas }),
     []);
+
+    useEffect(() => {
+        const q = query(refFotos, orderBy("fecha"));
+    
+        const unsubscribe = onSnapshot(q, qs => {
+            setFotos(
+                qs.docs.reduce(
+                    (result, doc) => {
+                        if (doc.data().esLinda === sonLindas) {
+                            result.push({
+                                id: doc.id,
+                                autor: doc.data().autor,
+                                esLinda: doc.data().esLinda,
+                                fecha: doc.data().fecha,
+                                url: doc.data().url,
+                                votos: doc.data().votos
+                            });
+                        }
+                        return result;
+                    }, []
+                )
+            )
+        });
+        return unsubscribe;
+    }, [])
 
     async function fotoTomadaHandler(objetoFoto) {
         const storageRef = ref(getStorage(), 'some-child');
@@ -49,7 +75,7 @@ export default function SeccionScreen({ navigation, route }) {
 
         const foto = {
           autor: email,
-          esLinda: cosas == 'Linda' ? true : false,
+          esLinda: sonLindas ? true : false,
           fecha: new Date(),
           url: url,
           votos: 0
@@ -57,6 +83,17 @@ export default function SeccionScreen({ navigation, route }) {
 
         addDoc(refFotos, foto);
     }
+
+    function renderizarItem({item}) {
+    }
+
+    const lista = (
+        <FlatList
+            data={fotos}
+            renderItem={renderizarItem}
+            keyExtractor={item => item.id}
+        />
+    )
 
     const viewTemporal = (
         <View style={{
@@ -86,7 +123,7 @@ export default function SeccionScreen({ navigation, route }) {
                     fotoTomada={fotoTomadaHandler}
                 />
                 :
-                foto &&
+                fotos.length > 0 &&
                 <Image
                     style={{
                         // width: foto.width,
@@ -95,7 +132,7 @@ export default function SeccionScreen({ navigation, route }) {
                         height: 300,
                         resizeMode: 'contain'
                     }}
-                    source={{ uri: foto.uri }}
+                    source={{uri: fotos[0].url}}
                 />
             }
             
