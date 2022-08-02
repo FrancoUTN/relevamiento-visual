@@ -1,61 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { Camera, CameraType } from 'expo-camera';
+import { StyleSheet, Text, View } from 'react-native';
+import { Camera } from 'expo-camera';
+import IconButton from '../ui/IconButton';
 
 export default function Camara() {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(CameraType.back);
+    const [hasPermission, setHasPermission] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
+    useEffect(() => {
+        (async () => {
+        const { status } = await Camera.requestCameraPermissionsAsync();
+        setHasPermission(status === 'granted');
+        })();
+    }, []);
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
-  return (
-    <View style={styles.container}>
-      <Camera style={styles.camera} type={type}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              setType(type === CameraType.back ? CameraType.front : CameraType.back);
-            }}>
-            <Text style={styles.text}> Flip </Text>
-          </TouchableOpacity>
-        </View>
-      </Camera>
-    </View>
-  );
+    if (hasPermission === null) {
+        return <View/>;
+    }
+    if (hasPermission === false) {
+        return <Text>No access to camera</Text>;
+    }
+    return (
+        <Camera style={styles.camera}>
+            <View style={styles.buttonContainer}>
+                <IconButton
+                    icon='camera-outline'
+                    color='white'
+                    size={50}
+                    onPress={() => { console.log('Camera pressed.') }}
+                />
+            </View>
+        </Camera>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  camera: {
-    flex: 1,
-  },
-  buttonContainer: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    margin: 20,
-  },
-  button: {
-    flex: 0.1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 18,
-    color: 'white',
-  },
+    camera: {
+        flex: 1,
+        justifyContent: 'flex-end'
+    },
+    buttonContainer: {
+        marginBottom: '8%',
+        alignSelf: 'center'
+    }
 });
