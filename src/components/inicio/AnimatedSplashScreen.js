@@ -5,7 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
-export default function AnimatedSplashScreen({ children, image }) {
+export default function AnimatedSplashScreen({ children, icono, texto }) {
     const animation = useMemo(() => new Animated.Value(0), []);
     const [animationComplete, setAnimationComplete] = useState(false);
     
@@ -32,7 +32,7 @@ export default function AnimatedSplashScreen({ children, image }) {
               },
             ]}
           >
-            <Animated.Text            
+            {/* <Animated.Text            
               style={{
                 // opacity: animation,
                 fontSize: 50,
@@ -40,31 +40,26 @@ export default function AnimatedSplashScreen({ children, image }) {
               }}
             >
               4ºA
-            </Animated.Text>
+            </Animated.Text> */}
             <Image
               style={{
                 width: "100%",
                 height: "100%",
                 position: 'absolute'
               }}
-              source={image}
+              source={icono}
             />
-            {/* <Animated.Image
+            <Animated.Image
               style={{
                 width: "100%",
                 height: "100%",
-                resizeMode: Constants.manifest.splash.resizeMode || "contain",
-                transform: [
-                  {
-                    translateY: animation,
-                  },
-                ],
+                opacity: animation
               }}
-              source={image}
-              onLoadEnd={onImageLoaded}
+              source={texto}
+              // onLoadEnd={onImageLoaded}
               fadeDuration={0}
-            /> */}
-            <Animated.Text
+            />
+            {/* <Animated.Text
               style={{
                 opacity: animation,
                 fontSize: 50,
@@ -72,7 +67,7 @@ export default function AnimatedSplashScreen({ children, image }) {
               }}
             >
               Catania Franco
-            </Animated.Text>
+            </Animated.Text> */}
           </Animated.View>
         )}
       </View>
