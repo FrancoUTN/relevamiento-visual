@@ -10,11 +10,12 @@ export default function AnimatedSplashScreen({ children, icono, texto }) {
     const [animationComplete, setAnimationComplete] = useState(false);
     
     useEffect(() => {
-      setTimeout(() => SplashScreen.hideAsync(), 300);
+      // setTimeout(() => SplashScreen.hideAsync(), 300);
+      SplashScreen.hideAsync();
       
       Animated.timing(animation, {
         toValue: 1,
-        duration: 5000,
+        duration: 7000,
         useNativeDriver: true,
       }).start(() => setAnimationComplete(true));      
     }, []);
@@ -32,15 +33,6 @@ export default function AnimatedSplashScreen({ children, icono, texto }) {
               },
             ]}
           >
-            {/* <Animated.Text            
-              style={{
-                // opacity: animation,
-                fontSize: 50,
-                color: 'white',
-              }}
-            >
-              4ºA
-            </Animated.Text> */}
             <Image
               style={{
                 width: "100%",
@@ -59,15 +51,6 @@ export default function AnimatedSplashScreen({ children, icono, texto }) {
               // onLoadEnd={onImageLoaded}
               fadeDuration={0}
             />
-            {/* <Animated.Text
-              style={{
-                opacity: animation,
-                fontSize: 50,
-                color: 'white',
-              }}
-            >
-              Catania Franco
-            </Animated.Text> */}
           </Animated.View>
         )}
       </View>
