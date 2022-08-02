@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import { getStorage, ref } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 import Camara from '../components/camara/Camara';
 import IconButton from '../components/ui/IconButton';
@@ -12,11 +12,9 @@ import refFotos from '../util/firestoreFotos';
 
 
 export default function SeccionScreen({ navigation, route }) {
-    // Create a root reference
-    const storage = getStorage();
-
     const auth = getAuth();
-    const email = auth.currentUser.email;  
+    const email = auth.currentUser.email;
+
     const cosas = route.params?.cosas;
     const [foto, setFoto] = useState();
     const [fotos, setFotos] = useState([]);
@@ -26,18 +24,37 @@ export default function SeccionScreen({ navigation, route }) {
         () => navigation.setOptions({ title: cosas }),
     []);
 
-    function fotoTomadaHandler(objetoFoto) {
-        setFoto(objetoFoto);
+    async function fotoTomadaHandler(objetoFoto) {
+        const storageRef = ref(getStorage(), 'some-child');
+
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                console.log(e);
+                reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", objetoFoto.uri, true);
+            xhr.send(null);
+        });
+
+        await uploadBytes(storageRef, blob);
+
+        const url = await getDownloadURL(storageRef);
+
         setTomarFoto(false);
-            
+
         const foto = {
           autor: email,
           esLinda: cosas == 'Linda' ? true : false,
           fecha: new Date(),
-          // url: '',
+          url: url,
           votos: 0
         }
-    
+
         addDoc(refFotos, foto);
     }
 
