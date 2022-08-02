@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import { Camera } from 'expo-camera';
 import IconButton from '../ui/IconButton';
 
 export default function Camara({ fotoTomada }) {
     const [hasPermission, setHasPermission] = useState(null);
+    const [vistaPrevia, setVistaPrevia] = useState(false);
+    const [foto, setFoto] = useState();
     const camaraRef = useRef();
 
     useEffect(() => {
@@ -18,7 +20,12 @@ export default function Camara({ fotoTomada }) {
         if (camaraRef) {
             const promesa = camaraRef.current.takePictureAsync();
 
-            promesa.then(fotoTomada);
+            // promesa.then(fotoTomada);
+
+            promesa.then(foto => {
+                setFoto(foto);
+                setVistaPrevia(!vistaPrevia);
+            });
         }
     }
 
@@ -28,21 +35,61 @@ export default function Camara({ fotoTomada }) {
     if (hasPermission === false) {
         return <Text>No access to camera</Text>;
     }
-    return (
-        <Camera
-            style={styles.camera}
-            ref={camara => camaraRef.current = camara}
-        >
-            <View style={styles.buttonContainer}>
-                <IconButton
-                    icon='camera-outline'
-                    color='white'
-                    size={50}
-                    onPress={sacarFoto}
-                />
+    if (!vistaPrevia) {
+        return (
+            <Camera
+                style={styles.camera}
+                ref={camara => camaraRef.current = camara}
+            >
+                <View style={styles.buttonContainer}>
+                    <IconButton
+                        icon='camera-outline'
+                        color='white'
+                        size={50}
+                        onPress={sacarFoto}
+                    />
+                </View>
+            </Camera>
+        );
+    }
+    if (vistaPrevia) {
+        return (
+            <View
+                style={styles.camera}
+            >
+                <ImageBackground
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        justifyContent: 'flex-end'
+                        // resizeMode: 'contain'
+                    }}
+                    source={{ uri: foto.uri }}
+                >
+                    <View
+                        style={{
+                            height: '20%',
+                            flexDirection: 'row',
+                            justifyContent: 'space-around'
+                        }}
+                    >
+                        <IconButton
+                            icon='close-circle-outline'
+                            color='red'
+                            size={60}
+                            onPress={sacarFoto}
+                        />
+                        <IconButton
+                            icon='checkmark-circle-outline'
+                            color='green'
+                            size={60}
+                            onPress={sacarFoto}
+                        />
+                    </View>
+                </ImageBackground>
             </View>
-        </Camera>
-    );
+        );
+    }
 }
 
 const styles = StyleSheet.create({

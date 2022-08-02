@@ -37,7 +37,7 @@ export default function SeccionScreen({ navigation, route }) {
             borderRadius: 10
         }}>
           <IconButton
-            icon={ tomarFoto ? 'arrow-undo-outline' : 'camera-outline' }
+            icon={ tomarFoto ? 'close' : 'camera-outline' }
             color='white'
             size={50}
             onPress={() => setTomarFoto(!tomarFoto) }
