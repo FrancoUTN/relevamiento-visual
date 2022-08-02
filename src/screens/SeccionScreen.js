@@ -28,7 +28,7 @@ export default function SeccionScreen({ navigation, route }) {
     []);
 
     useEffect(() => {
-        const q = query(refFotos, orderBy("fecha"));
+        const q = query(refFotos, orderBy("fecha", 'desc'));
     
         const unsubscribe = onSnapshot(q, qs => {
             setFotos(
@@ -89,7 +89,7 @@ export default function SeccionScreen({ navigation, route }) {
     function formatDate(timestamp) {
         const fecha = timestamp.toDate();
     
-        return moment(fecha).format('D/M k:mma')
+        return moment(fecha).format('D/M/YY k:mma')
     }
 
     function renderizarItem({item}) {
@@ -112,18 +112,18 @@ export default function SeccionScreen({ navigation, route }) {
 
     const viewTemporal = (
         <View style={{
-            margin: 20,
+            margin: 10,
             marginHorizontal: 145,
             alignItems: 'center',
             backgroundColor: Colores.primarioClaro,
             borderRadius: 10
         }}>
-          <IconButton
-            icon={ tomarFoto ? 'close' : 'camera-outline' }
-            color='white'
-            size={50}
-            onPress={() => setTomarFoto(!tomarFoto) }
-          />
+            <IconButton
+                icon={ tomarFoto ? 'close' : 'camera-outline' }
+                color='white'
+                size={40}
+                onPress={() => setTomarFoto(!tomarFoto) }
+            />
         </View>
     )
 
@@ -138,8 +138,7 @@ export default function SeccionScreen({ navigation, route }) {
                     fotoTomada={fotoTomadaHandler}
                 />
                 :
-                fotos.length > 0 &&
-                 lista 
+                lista
             }
             
         </View>
