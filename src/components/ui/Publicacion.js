@@ -49,7 +49,7 @@ export default function Publicacion({ autor, fecha, url, id, onVotar, votada, vo
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'deeppink',
+        backgroundColor: Colores.primarioOscuro,
         marginBottom: 60
     },
     pieContainer: {
