@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+
 import Camara from '../components/camara/Camara';
 import IconButton from '../components/ui/IconButton';
 
@@ -7,9 +10,12 @@ import { Colores } from '../constants/estilos';
 
 
 export default function SeccionScreen({ navigation, route }) {
+    const auth = getAuth();
+    const email = auth.currentUser.email;  
     const cosas = route.params?.cosas;
-    const [tomarFoto, setTomarFoto] = useState(false);
     const [foto, setFoto] = useState();
+    const [fotos, setFotos] = useState([]);
+    const [tomarFoto, setTomarFoto] = useState(false);
 
     useEffect(
         () => navigation.setOptions({ title: cosas }),
