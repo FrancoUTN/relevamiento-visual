@@ -74,7 +74,8 @@ const styles = StyleSheet.create({
     },
     imagen: {
         width: '100%',
-        height: 480,
+        // height: 480,
+        height: 280,
         resizeMode: 'contain'
     },
     autor: {

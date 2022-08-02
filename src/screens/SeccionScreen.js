@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
-import { addDoc, doc, getFirestore, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
+import { addDoc, doc, getDoc, getFirestore, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import moment from 'moment';
@@ -24,6 +24,7 @@ export default function SeccionScreen({ navigation, route }) {
     const [usuario, setUsuario] = useState();
     const [fotos, setFotos] = useState([]);
     const [tomarFoto, setTomarFoto] = useState(false);
+    const [fotoRefAnterior, setFotoRefAnterior] = useState(null);
 
     useEffect(
         () => navigation.setOptions({
@@ -101,27 +102,37 @@ export default function SeccionScreen({ navigation, route }) {
     }
 
     async function onVotarHandler(id, votos) {
-        const idFotoVotada = sonLindas ? usuario.masLinda : usuario.masFea;
+        const masLindaActual = usuario.masLinda;
+
+        if (id != masLindaActual) {
+            const fotoQueGana = doc(getFirestore(), 'fotos', id);
+            const docSnap = await getDoc(fotoQueGana);
+            const votosTraidos = docSnap.data().votos;
+            await updateDoc(fotoQueGana, { votos: votosTraidos + 1});
+        }
+        if (masLindaActual) {
+            const fotoQuePierde = doc(getFirestore(), 'fotos', masLindaActual);
+            const docSnap = await getDoc(fotoQuePierde);
+            const votosTraidos = docSnap.data().votos;
+            await updateDoc(fotoQuePierde, { votos: votosTraidos - 1});
+        }
+
         let objeto;
 
         if (sonLindas) {
-            if (id === idFotoVotada) {
+            if (id === masLindaActual) {
                 objeto = {
                     masLinda: ''
                 };
-                const fotoRef = doc(getFirestore(), 'fotos', id);
-                await updateDoc(fotoRef, { votos: votos - 1});
             }
             else {
                 objeto = {
                     masLinda: id
                 };
-                const fotoRef = doc(getFirestore(), 'fotos', id);
-                await updateDoc(fotoRef, { votos: votos + 1});
             }
         }
         else {
-            if (id === idFotoVotada) {
+            if (id === masLindaActual) {
                 objeto = {
                     masFea: ''
                 };
@@ -135,6 +146,44 @@ export default function SeccionScreen({ navigation, route }) {
 
         await updateDoc(userRef, objeto);
     }
+
+    // async function onVotarHandler(id, votos) {
+    //     const idFotoVotada = sonLindas ? usuario.masLinda : usuario.masFea;
+    //     let objeto;
+
+    //     if (sonLindas) {
+    //         if (id === idFotoVotada) {
+    //             objeto = {
+    //                 masLinda: ''
+    //             };
+    //             const fotoRef = doc(getFirestore(), 'fotos', id);
+    //             await updateDoc(fotoRef, { votos: votos - 1});
+    //         }
+    //         else {
+    //             objeto = {
+    //                 masLinda: id
+    //             };
+    //             const fotoRef = doc(getFirestore(), 'fotos', id);
+    //             setFotoRefAnterior(fotoRef);
+    //             await updateDoc(fotoRef, { votos: votos + 1});
+    //             await updateDoc(fotoRefAnterior, { votos: votos - 1});
+    //         }
+    //     }
+    //     else {
+    //         if (id === idFotoVotada) {
+    //             objeto = {
+    //                 masFea: ''
+    //             };
+    //         }
+    //         else {
+    //             objeto = {
+    //                 masFea: id
+    //             };
+    //         }
+    //     }
+
+    //     await updateDoc(userRef, objeto);
+    // }
 
     function formatDate(timestamp) {
         const fecha = timestamp.toDate();
