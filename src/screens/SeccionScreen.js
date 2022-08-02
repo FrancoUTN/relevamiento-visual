@@ -11,6 +11,7 @@ import { Colores } from '../constants/estilos';
 import refUsuarios from '../util/firestoreUsuarios';
 import refFotos from '../util/firestoreFotos';
 import Publicacion from '../components/ui/Publicacion';
+import LoadingOverlay from '../components/ui/LoadingOverlay';
 
 
 export default function SeccionScreen({ navigation, route }) {
@@ -24,7 +25,7 @@ export default function SeccionScreen({ navigation, route }) {
     const [usuario, setUsuario] = useState();
     const [fotos, setFotos] = useState([]);
     const [tomarFoto, setTomarFoto] = useState(false);
-    const [fotoRefAnterior, setFotoRefAnterior] = useState(null);
+    const [cargando, setCargando] = useState(true);
 
     useEffect(
         () => navigation.setOptions({
@@ -62,12 +63,15 @@ export default function SeccionScreen({ navigation, route }) {
                         return result;
                     }, []
                 )
-            )
+            );
+            setCargando(false);
         });
         return unsubscribe;
     }, [])
 
     async function fotoTomadaHandler(objetoFoto) {
+        setCargando(true);
+        setTomarFoto(false);
         const storageRef = ref(getStorage(), new Date().toISOString());
 
         const blob = await new Promise((resolve, reject) => {
@@ -87,8 +91,6 @@ export default function SeccionScreen({ navigation, route }) {
         await uploadBytes(storageRef, blob);
 
         const url = await getDownloadURL(storageRef);
-
-        setTomarFoto(false);
 
         const foto = {
           autor: email,
@@ -187,20 +189,25 @@ export default function SeccionScreen({ navigation, route }) {
         );
     }
 
-    const lista = (
-        <FlatList
-            data={fotos}
-            renderItem={renderizarItem}
-            keyExtractor={item => item.id}
-        />
-    )
+    const lista = cargando ?    
+        (
+            <LoadingOverlay message={'Cargando...'}/>
+        )
+        :
+        (
+            <FlatList
+                data={fotos}
+                renderItem={renderizarItem}
+                keyExtractor={item => item.id}
+            />
+        );
 
     const viewTemporal = (
         <View style={{
             margin: 10,
             marginHorizontal: 145,
             alignItems: 'center',
-            backgroundColor: Colores.primarioClaro,
+            backgroundColor: tomarFoto ? Colores.errorOscuro : Colores.primarioClaro,
             borderRadius: 10
         }}>
             <IconButton
