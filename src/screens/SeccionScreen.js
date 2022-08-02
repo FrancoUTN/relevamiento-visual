@@ -53,7 +53,7 @@ export default function SeccionScreen({ navigation, route }) {
     }, [])
 
     async function fotoTomadaHandler(objetoFoto) {
-        const storageRef = ref(getStorage(), 'some-child');
+        const storageRef = ref(getStorage(), new Date().toISOString());
 
         const blob = await new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
@@ -86,6 +86,10 @@ export default function SeccionScreen({ navigation, route }) {
         addDoc(refFotos, foto);
     }
 
+    function onVotarHandler(id) {
+        console.log(id);
+    }
+
     function formatDate(timestamp) {
         const fecha = timestamp.toDate();
     
@@ -95,9 +99,11 @@ export default function SeccionScreen({ navigation, route }) {
     function renderizarItem({item}) {
         return (
             <Publicacion
+                id={item.id}
                 autor={item.autor}
                 fecha={formatDate(item.fecha)}
                 url={item.url}
+                onVotar={onVotarHandler}
             />
         );
     }

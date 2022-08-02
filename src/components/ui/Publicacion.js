@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import IconButton from './IconButton';
 
-export default function Publicacion({ autor, fecha, url }) {
+export default function Publicacion({ autor, fecha, url, id, onVotar }) {
     return (
         <View style={styles.container}>
             <Image
@@ -14,7 +14,7 @@ export default function Publicacion({ autor, fecha, url }) {
                         icon={ autor ? 'star-outline' : 'star' } // Revisar
                         color={ autor ? 'black' : 'yellow' } // Revisar
                         size={40}
-                        onPress={() => {}}
+                        onPress={() => onVotar(id)}
                     />
                 </View>
                 <View style={styles.datosContainer}>
