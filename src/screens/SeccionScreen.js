@@ -9,6 +9,7 @@ import { Colores } from '../constants/estilos';
 export default function SeccionScreen({ navigation, route }) {
     const cosas = route.params?.cosas;
     const [tomarFoto, setTomarFoto] = useState(false);
+    const [foto, setFoto] = useState();
 
     useEffect(
         () => navigation.setOptions({ title: cosas }),
@@ -22,6 +23,11 @@ export default function SeccionScreen({ navigation, route }) {
     //     console.log('Hola, ' + cosas)
     // }
 
+    function fotoTomadaHandler(objetoFoto) {
+        setFoto(objetoFoto);
+        setTomarFoto(false);
+    }
+
     const viewTemporal = (
         <View style={{
             margin: 20,
@@ -31,7 +37,7 @@ export default function SeccionScreen({ navigation, route }) {
             borderRadius: 10
         }}>
           <IconButton
-            icon='camera-outline'
+            icon={ tomarFoto ? 'arrow-undo-outline' : 'camera-outline' }
             color='white'
             size={50}
             onPress={() => setTomarFoto(!tomarFoto) }
@@ -46,11 +52,21 @@ export default function SeccionScreen({ navigation, route }) {
 
             {
                 tomarFoto ?
-                <Camara/>
+                <Camara
+                    fotoTomada={fotoTomadaHandler}
+                />
                 :
-                <Text>
-                    {cosas}
-                </Text>
+                foto &&
+                <Image
+                    style={{
+                        // width: foto.width,
+                        // height: foto.height,
+                        width: '100%',
+                        height: 300,
+                        resizeMode: 'contain'
+                    }}
+                    source={{ uri: foto.uri }}
+                />
             }
             
         </View>

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Camera } from 'expo-camera';
 import IconButton from '../ui/IconButton';
 
-export default function Camara() {
+export default function Camara({ fotoTomada }) {
     const [hasPermission, setHasPermission] = useState(null);
+    const camaraRef = useRef();
 
     useEffect(() => {
         (async () => {
@@ -13,6 +14,14 @@ export default function Camara() {
         })();
     }, []);
 
+    function sacarFoto() {
+        if (camaraRef) {
+            const promesa = camaraRef.current.takePictureAsync();
+
+            promesa.then(fotoTomada);
+        }
+    }
+
     if (hasPermission === null) {
         return <View/>;
     }
@@ -20,13 +29,16 @@ export default function Camara() {
         return <Text>No access to camera</Text>;
     }
     return (
-        <Camera style={styles.camera}>
+        <Camera
+            style={styles.camera}
+            ref={camara => camaraRef.current = camara}
+        >
             <View style={styles.buttonContainer}>
                 <IconButton
                     icon='camera-outline'
                     color='white'
                     size={50}
-                    onPress={() => { console.log('Camera pressed.') }}
+                    onPress={sacarFoto}
                 />
             </View>
         </Camera>
