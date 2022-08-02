@@ -25,7 +25,8 @@ export default function App() {
   return (
     <>
       <StatusBar style="light" />
-      <AnimatedSplashScreen image={require('./assets/splash.png')}>
+      {/* <AnimatedSplashScreen image={require('./assets/splash.png')}> */}
+      <AnimatedSplashScreen image={require('./assets/icon-splash.png')}>
         <MainScreen />
       </AnimatedSplashScreen>
     </>

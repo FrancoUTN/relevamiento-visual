@@ -1,42 +1,28 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Animated, StyleSheet, View } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { Animated, Image, StyleSheet, View } from "react-native";
 import Constants from "expo-constants";
 import * as SplashScreen from "expo-splash-screen";
 
-// Instruct SplashScreen not to hide yet, we want to do this manually
-SplashScreen.preventAutoHideAsync().catch(() => {
-  /* reloading the app might trigger some race conditions, ignore them */
-});
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function AnimatedSplashScreen({ children, image }) {
     const animation = useMemo(() => new Animated.Value(0), []);
-    const [isAppReady, setAppReady] = useState(false);
-    const [isSplashAnimationComplete, setAnimationComplete] = useState(false);
-  
-    const onImageLoaded = useCallback(async () => {
-      try {
-        setTimeout(() => SplashScreen.hideAsync(), 300);
-      } catch (e) {
-  
-      } finally {
-        setAppReady(true);
-      }
-    }, []);
-  
+    const [animationComplete, setAnimationComplete] = useState(false);
+    
     useEffect(() => {
-      if (isAppReady) {
-        Animated.timing(animation, {
-          toValue: -5000,
-          duration: 1200,
-          useNativeDriver: true,
-        }).start(() => setAnimationComplete(true));
-      }
-    }, [isAppReady]);
+      setTimeout(() => SplashScreen.hideAsync(), 300);
+      
+      Animated.timing(animation, {
+        toValue: 1,
+        duration: 5000,
+        useNativeDriver: true,
+      }).start(() => setAnimationComplete(true));      
+    }, []);
   
     return (
       <View style={{ flex: 1 }}>
-        {isAppReady && children}
-        {!isSplashAnimationComplete && (
+        {animationComplete && children}
+        {!animationComplete && (
           <Animated.View
             pointerEvents="none"
             style={[
@@ -46,7 +32,24 @@ export default function AnimatedSplashScreen({ children, image }) {
               },
             ]}
           >
-            <Animated.Image
+            <Animated.Text            
+              style={{
+                // opacity: animation,
+                fontSize: 50,
+                color: 'white',
+              }}
+            >
+              4ºA
+            </Animated.Text>
+            <Image
+              style={{
+                width: "100%",
+                height: "100%",
+                position: 'absolute'
+              }}
+              source={image}
+            />
+            {/* <Animated.Image
               style={{
                 width: "100%",
                 height: "100%",
@@ -60,7 +63,16 @@ export default function AnimatedSplashScreen({ children, image }) {
               source={image}
               onLoadEnd={onImageLoaded}
               fadeDuration={0}
-            />
+            /> */}
+            <Animated.Text
+              style={{
+                opacity: animation,
+                fontSize: 50,
+                color: 'white',
+              }}
+            >
+              Catania Franco
+            </Animated.Text>
           </Animated.View>
         )}
       </View>
