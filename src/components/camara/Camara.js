@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { ImageBackground, StyleSheet, Text, View } from 'react-native';
 import { Camera } from 'expo-camera';
 import IconButton from '../ui/IconButton';
 
@@ -18,15 +18,20 @@ export default function Camara({ fotoTomada }) {
 
     function sacarFoto() {
         if (camaraRef) {
-            const promesa = camaraRef.current.takePictureAsync();
-
-            // promesa.then(fotoTomada);
-
-            promesa.then(foto => {
+            camaraRef.current.takePictureAsync().then( foto => {
                 setFoto(foto);
                 setVistaPrevia(!vistaPrevia);
             });
         }
+    }
+
+    function cancelar() {
+        setFoto(null);
+        setVistaPrevia(!vistaPrevia);
+    }
+    
+    function confirmar() {
+        fotoTomada(foto);
     }
 
     if (hasPermission === null) {
@@ -62,7 +67,6 @@ export default function Camara({ fotoTomada }) {
                         width: '100%',
                         height: '100%',
                         justifyContent: 'flex-end'
-                        // resizeMode: 'contain'
                     }}
                     source={{ uri: foto.uri }}
                 >
@@ -77,13 +81,13 @@ export default function Camara({ fotoTomada }) {
                             icon='close-circle-outline'
                             color='red'
                             size={60}
-                            onPress={sacarFoto}
+                            onPress={cancelar}
                         />
                         <IconButton
                             icon='checkmark-circle-outline'
                             color='green'
                             size={60}
-                            onPress={sacarFoto}
+                            onPress={confirmar}
                         />
                     </View>
                 </ImageBackground>
