@@ -2,14 +2,19 @@ import { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { getStorage, ref } from "firebase/storage";
 
 import Camara from '../components/camara/Camara';
 import IconButton from '../components/ui/IconButton';
 import { Colores } from '../constants/estilos';
-import referencia from '../util/firestore';
+import refUsuarios from '../util/firestoreUsuarios';
+import refFotos from '../util/firestoreFotos';
 
 
 export default function SeccionScreen({ navigation, route }) {
+    // Create a root reference
+    const storage = getStorage();
+
     const auth = getAuth();
     const email = auth.currentUser.email;  
     const cosas = route.params?.cosas;
@@ -21,17 +26,19 @@ export default function SeccionScreen({ navigation, route }) {
         () => navigation.setOptions({ title: cosas }),
     []);
 
-    // useEffect(
-    //     () => navigation.setParams({ funcion: () => subirFoto() }),
-    // []);
-
-    // function subirFoto() {
-    //     console.log('Hola, ' + cosas)
-    // }
-
     function fotoTomadaHandler(objetoFoto) {
         setFoto(objetoFoto);
         setTomarFoto(false);
+            
+        const foto = {
+          autor: email,
+          esLinda: cosas == 'Linda' ? true : false,
+          fecha: new Date(),
+          // url: '',
+          votos: 0
+        }
+    
+        addDoc(refFotos, foto);
     }
 
     const viewTemporal = (
