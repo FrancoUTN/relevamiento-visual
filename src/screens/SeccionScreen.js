@@ -3,12 +3,14 @@ import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native
 import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import moment from 'moment';
 
 import Camara from '../components/camara/Camara';
 import IconButton from '../components/ui/IconButton';
 import { Colores } from '../constants/estilos';
 import refUsuarios from '../util/firestoreUsuarios';
 import refFotos from '../util/firestoreFotos';
+import Publicacion from '../components/ui/Publicacion';
 
 
 export default function SeccionScreen({ navigation, route }) {
@@ -84,7 +86,20 @@ export default function SeccionScreen({ navigation, route }) {
         addDoc(refFotos, foto);
     }
 
+    function formatDate(timestamp) {
+        const fecha = timestamp.toDate();
+    
+        return moment(fecha).format('D/M k:mma')
+    }
+
     function renderizarItem({item}) {
+        return (
+            <Publicacion
+                autor={item.autor}
+                fecha={formatDate(item.fecha)}
+                url={item.url}
+            />
+        );
     }
 
     const lista = (
@@ -124,16 +139,7 @@ export default function SeccionScreen({ navigation, route }) {
                 />
                 :
                 fotos.length > 0 &&
-                <Image
-                    style={{
-                        // width: foto.width,
-                        // height: foto.height,
-                        width: '100%',
-                        height: 300,
-                        resizeMode: 'contain'
-                    }}
-                    source={{uri: fotos[0].url}}
-                />
+                 lista 
             }
             
         </View>
