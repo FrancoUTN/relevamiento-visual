@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import { addDoc, collection, doc, getFirestore, onSnapshot, orderBy, query, updateDoc, where } from 'firebase/firestore';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { addDoc, doc, getFirestore, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import moment from 'moment';
@@ -96,16 +96,35 @@ export default function SeccionScreen({ navigation, route }) {
     }
 
     async function onVotarHandler(id) {
+        const idFotoVotada = sonLindas ? usuario.masLinda : usuario.masFea;
+        let objeto;
+
         if (sonLindas) {
-            await updateDoc(userRef, {
-                masLinda: id
-            });
+            if (id === idFotoVotada) {
+                objeto = {
+                    masLinda: ''
+                };
+            }
+            else {
+                objeto = {
+                    masLinda: id
+                };
+            }
         }
         else {
-            await updateDoc(userRef, {
-                masFea: id
-            });
+            if (id === idFotoVotada) {
+                objeto = {
+                    masFea: ''
+                };
+            }
+            else {
+                objeto = {
+                    masFea: id
+                };
+            }
         }
+
+        await updateDoc(userRef, objeto);
     }
 
     function formatDate(timestamp) {
@@ -115,32 +134,19 @@ export default function SeccionScreen({ navigation, route }) {
     }
 
     function renderizarItem({item}) {
-        const fotoVotada = sonLindas ? usuario.masLinda : usuario.masFea;  
+        const fotoVotada = sonLindas ? usuario.masLinda : usuario.masFea;
 
-        if (item.id === fotoVotada) {
-            return (
-                <Publicacion
-                    id={item.id}
-                    autor={item.autor}
-                    fecha={formatDate(item.fecha)}
-                    url={item.url}
-                    onVotar={onVotarHandler}
-                    votada={true}
-                />
-            );
-        }
-        else {
-            return (
-                <Publicacion
-                    id={item.id}
-                    autor={item.autor}
-                    fecha={formatDate(item.fecha)}
-                    url={item.url}
-                    onVotar={onVotarHandler}
-                    votada={false}
-                />
-            );
-        }
+        return (
+            <Publicacion
+                id={item.id}
+                autor={item.autor}
+                fecha={formatDate(item.fecha)}
+                url={item.url}
+                onVotar={onVotarHandler}
+                votada={item.id === fotoVotada}
+                votos={item.votos}
+            />
+        );
     }
 
     const lista = (

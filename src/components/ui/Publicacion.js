@@ -1,7 +1,8 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { Colores } from '../../constants/estilos';
 import IconButton from './IconButton';
 
-export default function Publicacion({ autor, fecha, url, id, onVotar, votada }) {
+export default function Publicacion({ autor, fecha, url, id, onVotar, votada, votos }) {
     return (
         <View style={styles.container}>
             <Image
@@ -15,17 +16,20 @@ export default function Publicacion({ autor, fecha, url, id, onVotar, votada }) 
                     <IconButton
                         icon='star'
                         color='yellow'
-                        size={40}
+                        size={30}
                         onPress={() => onVotar(id)}
                     />
                     :
                     <IconButton
                         icon='star-outline'
                         color='black'
-                        size={40}
+                        size={30}
                         onPress={() => onVotar(id)}
                     />
                 }
+                <Text style={styles.votos}>
+                    { votos }
+                </Text>
                 </View>
                 <View style={styles.datosContainer}>
                     <Text style={styles.autor}>
@@ -44,7 +48,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'deeppink',
-        marginBottom: 20
+        marginBottom: 60
     },
     pieContainer: {
         flex: 1,
@@ -54,7 +58,14 @@ const styles = StyleSheet.create({
         // height: 45
     },
     votoContainer: {
-        margin: 5
+        flexDirection: 'row',
+        margin: 5,
+        alignItems: 'center'
+    },
+    votos : {
+        marginHorizontal: 10,
+        fontSize: 24,
+        color: Colores.primarioOscuro
     },
     datosContainer: {
         margin: 5
@@ -66,10 +77,12 @@ const styles = StyleSheet.create({
     },
     autor: {
         color: '#111111',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        color: Colores.primarioOscuro
     },    
     fecha: {
         color: '#555555',
-        alignSelf: 'flex-end'
+        alignSelf: 'flex-end',
+        color: Colores.primarioOscuro
     }
 });
