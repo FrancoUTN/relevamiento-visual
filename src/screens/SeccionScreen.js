@@ -108,15 +108,32 @@ export default function SeccionScreen({ navigation, route }) {
     }
 
     function renderizarItem({item}) {
-        return (
-            <Publicacion
-                id={item.id}
-                autor={item.autor}
-                fecha={formatDate(item.fecha)}
-                url={item.url}
-                onVotar={onVotarHandler}
-            />
-        );
+        const fotoVotada = sonLindas ? usuario.masLinda : usuario.masFea;  
+
+        if (item.id === fotoVotada) {
+            return (
+                <Publicacion
+                    id={item.id}
+                    autor={item.autor}
+                    fecha={formatDate(item.fecha)}
+                    url={item.url}
+                    onVotar={onVotarHandler}
+                    votada={true}
+                />
+            );
+        }
+        else {
+            return (
+                <Publicacion
+                    id={item.id}
+                    autor={item.autor}
+                    fecha={formatDate(item.fecha)}
+                    url={item.url}
+                    onVotar={onVotarHandler}
+                    votada={false}
+                />
+            );
+        }
     }
 
     const lista = (
