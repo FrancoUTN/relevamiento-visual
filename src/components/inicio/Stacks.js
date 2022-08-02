@@ -8,7 +8,7 @@ import ModalScreen from "../../screens/ModalScreen";
 import { Contexto } from '../../store/Contexto';
 import IconButton from '../ui/IconButton';
 import SeccionScreen from '../../screens/SeccionScreen';
-import { Text, View } from 'react-native';
+// import { Text, View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,43 +50,21 @@ export function AuthenticatedStack() {
     />
   );
 
-  // function opcionesSeccion({ route }) {
-  //   return {
-  //     headerRight: funcionHeaderRight(route.params.funcion)
-  //   };
-  // }
-
-  // function funcionHeaderRight (funcion) {
+  // function funcionHeaderRight () {
   //   return () => (
   //     <>
   //       <View style={{marginHorizontal: 30}} >
   //         <IconButton
-  //           icon='camera'
+  //           icon='camera-outline'
   //           color='white'
   //           size={28}
-  //           onPress={funcion}
+  //           onPress={() => { console.log('Camera pressed.') }}
   //         />
   //       </View>
   //       { logoutIcon }
   //     </>
   //   );
   // }
-
-  function funcionHeaderRight () {
-    return () => (
-      <>
-        <View style={{marginHorizontal: 30}} >
-          <IconButton
-            icon='camera-outline'
-            color='white'
-            size={28}
-            onPress={() => { console.log('Camera pressed.') }}
-          />
-        </View>
-        { logoutIcon }
-      </>
-    );
-  }
 
   return (
     <Stack.Navigator
@@ -107,7 +85,7 @@ export function AuthenticatedStack() {
       <Stack.Screen
         name="Seccion"
         component={SeccionScreen}
-        options={{ headerRight: funcionHeaderRight() }}
+        options={{ headerRight: () => logoutIcon }}
       />
     </Stack.Navigator>
   );

@@ -207,7 +207,7 @@ export default function SeccionScreen({ navigation, route }) {
             margin: 10,
             marginHorizontal: 145,
             alignItems: 'center',
-            backgroundColor: tomarFoto ? Colores.errorOscuro : Colores.primarioClaro,
+            backgroundColor: tomarFoto ? Colores.errorOscuro : Colores.otro,
             borderRadius: 10
         }}>
             <IconButton

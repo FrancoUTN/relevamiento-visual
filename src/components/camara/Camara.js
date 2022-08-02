@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ImageBackground, StyleSheet, Text, View } from 'react-native';
 import { Camera } from 'expo-camera';
 import IconButton from '../ui/IconButton';
+import { Colores } from '../../constants/estilos';
 
 export default function Camara({ fotoTomada }) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -79,13 +80,13 @@ export default function Camara({ fotoTomada }) {
                     >
                         <IconButton
                             icon='close-circle-outline'
-                            color='red'
+                            color={Colores.errorOscuro}
                             size={60}
                             onPress={cancelar}
                         />
                         <IconButton
                             icon='checkmark-circle-outline'
-                            color='green'
+                            color='#3EC300'
                             size={60}
                             onPress={confirmar}
                         />
