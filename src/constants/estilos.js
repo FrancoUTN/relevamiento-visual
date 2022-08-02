@@ -5,5 +5,6 @@ export const Colores = {
   secundario: '#EC0868',
   terciario: '#7C7F65',
   errorClaro: '#FFBC42',
-  errorOscuro: '#880D1E'
+  errorOscuro: '#880D1E',
+  voto: '#FFD166'
 }

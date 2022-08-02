@@ -1,6 +1,8 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
+
 import { Colores } from '../../constants/estilos';
 import IconButton from './IconButton';
+
 
 export default function Publicacion({ autor, fecha, url, id, onVotar, votada, votos }) {
     return (
@@ -15,16 +17,16 @@ export default function Publicacion({ autor, fecha, url, id, onVotar, votada, vo
                     votada ?
                     <IconButton
                         icon='star'
-                        color='yellow'
+                        color={Colores.voto}
                         size={30}
-                        onPress={() => onVotar(id)}
+                        onPress={() => onVotar(id, votos)}
                     />
                     :
                     <IconButton
                         icon='star-outline'
-                        color='black'
+                        color={Colores.primarioOscuro}
                         size={30}
-                        onPress={() => onVotar(id)}
+                        onPress={() => onVotar(id, votos)}
                     />
                 }
                 <Text style={styles.votos}>

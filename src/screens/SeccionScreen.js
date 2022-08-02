@@ -26,7 +26,12 @@ export default function SeccionScreen({ navigation, route }) {
     const [tomarFoto, setTomarFoto] = useState(false);
 
     useEffect(
-        () => navigation.setOptions({ title: cosas }),
+        () => navigation.setOptions({
+            title: cosas,
+            headerStyle: {
+                backgroundColor: sonLindas ? Colores.secundario : Colores.terciario
+            },
+        }),
     []);
     
     useEffect(() => {
@@ -95,7 +100,7 @@ export default function SeccionScreen({ navigation, route }) {
         addDoc(refFotos, foto);
     }
 
-    async function onVotarHandler(id) {
+    async function onVotarHandler(id, votos) {
         const idFotoVotada = sonLindas ? usuario.masLinda : usuario.masFea;
         let objeto;
 
@@ -104,11 +109,15 @@ export default function SeccionScreen({ navigation, route }) {
                 objeto = {
                     masLinda: ''
                 };
+                const fotoRef = doc(getFirestore(), 'fotos', id);
+                await updateDoc(fotoRef, { votos: votos - 1});
             }
             else {
                 objeto = {
                     masLinda: id
                 };
+                const fotoRef = doc(getFirestore(), 'fotos', id);
+                await updateDoc(fotoRef, { votos: votos + 1});
             }
         }
         else {
