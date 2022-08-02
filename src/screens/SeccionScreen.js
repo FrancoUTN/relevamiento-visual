@@ -5,8 +5,8 @@ import { getAuth } from 'firebase/auth';
 
 import Camara from '../components/camara/Camara';
 import IconButton from '../components/ui/IconButton';
-
 import { Colores } from '../constants/estilos';
+import referencia from '../util/firestore';
 
 
 export default function SeccionScreen({ navigation, route }) {
