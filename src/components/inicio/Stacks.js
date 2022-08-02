@@ -27,10 +27,10 @@ export function AuthStack() {
         options={{ title: 'Inicia sesión' }}
       />
       <Stack.Group screenOptions={{
-          // presentation: 'modal',
-          // headerStyle: { backgroundColor: Colors.error500 },
-          // headerTintColor: 'white',
-          // contentStyle: { backgroundColor: Colors.error100 },
+          presentation: 'modal',
+          headerStyle: { backgroundColor: Colores.errorOscuro },
+          headerTintColor: 'white',
+          contentStyle: { backgroundColor: Colores.errorClaro },
         }}
       >
         <Stack.Screen name="Modal" component={ModalScreen} options={{ title: 'Error' }}/>
@@ -50,21 +50,37 @@ export function AuthenticatedStack() {
     />
   );
 
-  function opcionesSeccion({ route }) {
-    return {
-      headerRight: funcionHeaderRight(route.params.funcion)
-    };
-  }
+  // function opcionesSeccion({ route }) {
+  //   return {
+  //     headerRight: funcionHeaderRight(route.params.funcion)
+  //   };
+  // }
 
-  function funcionHeaderRight (funcion) {
+  // function funcionHeaderRight (funcion) {
+  //   return () => (
+  //     <>
+  //       <View style={{marginHorizontal: 30}} >
+  //         <IconButton
+  //           icon='camera'
+  //           color='white'
+  //           size={28}
+  //           onPress={funcion}
+  //         />
+  //       </View>
+  //       { logoutIcon }
+  //     </>
+  //   );
+  // }
+
+  function funcionHeaderRight () {
     return () => (
       <>
         <View style={{marginHorizontal: 30}} >
           <IconButton
-            icon='camera'
+            icon='camera-outline'
             color='white'
             size={28}
-            onPress={funcion}
+            onPress={() => { console.log('Camera pressed.') }}
           />
         </View>
         { logoutIcon }
@@ -91,9 +107,7 @@ export function AuthenticatedStack() {
       <Stack.Screen
         name="Seccion"
         component={SeccionScreen}
-        options={
-          opcionesSeccion
-        }
+        options={{ headerRight: funcionHeaderRight() }}
       />
     </Stack.Navigator>
   );

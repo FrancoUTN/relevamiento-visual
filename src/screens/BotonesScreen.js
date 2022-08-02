@@ -1,17 +1,17 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
-import GiantButton from '../components/ui/GiantButton';
+import { StyleSheet, View } from 'react-native';
 
+import GiantButton from '../components/ui/GiantButton';
 import { Colores } from '../constants/estilos';
 
 
 export default function BotonesScreen({ navigation }) {
 
   function onLindasPressHandler() {
-    navigation.navigate('Seccion', {'cosas': 'camera'});
+    navigation.navigate('Seccion', {'cosas': 'Lindas'});
   }
 
   function onFeasPressHandler() {
-    navigation.navigate('Seccion', {'cosas': 'camera-outline'});
+    navigation.navigate('Seccion', {'cosas': 'Feas'});
     
   }
 

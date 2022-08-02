@@ -9,7 +9,7 @@ export default function ModalScreen({ route, navigation }) {
       <Text style={styles.texto}>
         { mensajeError }
       </Text>
-      <Button onPress={() => navigation.goBack()} title="Regresar" color={Colores.primarioMedio}/>
+      <Button onPress={() => navigation.goBack()} title="Regresar" color={Colores.primarioOscuro}/>
     </View>
   );
 }
@@ -17,7 +17,7 @@ export default function ModalScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   texto: {
     fontSize: 20,
-    color: 'white',
+    color: Colores.primarioOscuro,
     margin: 20
   }
 });

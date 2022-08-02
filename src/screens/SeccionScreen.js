@@ -11,13 +11,13 @@ export default function SeccionScreen({ navigation, route }) {
         () => navigation.setOptions({ title: cosas }),
     []);
 
-    useEffect(
-        () => navigation.setParams({ funcion: () => subirFoto() }),
-    []);
+    // useEffect(
+    //     () => navigation.setParams({ funcion: () => subirFoto() }),
+    // []);
 
-    function subirFoto() {
-        console.log('Hola, ' + cosas)
-    }
+    // function subirFoto() {
+    //     console.log('Hola, ' + cosas)
+    // }
 
     return (
         <View style={styles.container}>
