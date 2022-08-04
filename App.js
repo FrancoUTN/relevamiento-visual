@@ -24,12 +24,11 @@ function Navigation() {
 export default function App() {
   return (
     <>
-      <StatusBar style="light" />
-      {/* <AnimatedSplashScreen image={require('./assets/splash.png')}> */}
       <AnimatedSplashScreen
         icono={require('./assets/splash.png')}
         texto={require('./assets/text-splash.png')}
       >
+        <StatusBar style="light" />
         <MainScreen />
       </AnimatedSplashScreen>
     </>

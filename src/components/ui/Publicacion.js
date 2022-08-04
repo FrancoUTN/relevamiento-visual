@@ -1,16 +1,32 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 
 import { Colores } from '../../constants/estilos';
 import IconButton from './IconButton';
 
 
 export default function Publicacion({ autor, fecha, url, id, onVotar, votada, votos }) {
+    const [imagenLista, setImagenLista] = useState(false);
+
     return (
         <View style={styles.container}>
-            <Image
-                style={styles.imagen}
-                source={{ uri: url }}
-            />
+            <View
+                style={styles.imagenContainer}
+            >
+                <Image
+                    style={styles.imagen}
+                    source={{ uri: url }}
+                    onLoadEnd={() => setImagenLista(true)}
+                />
+                {
+                    !imagenLista &&
+                    <View
+                        style={[styles.imagenContainer, StyleSheet.absoluteFill]}
+                    >
+                        <ActivityIndicator size="large" color="white" />
+                    </View>
+                }
+            </View>
             <View style={styles.pieContainer}>
                 <View style={styles.votoContainer}>
                 {
@@ -87,5 +103,13 @@ const styles = StyleSheet.create({
         color: '#555555',
         alignSelf: 'flex-end',
         color: Colores.primarioOscuro
-    }
+    },
+    imagenContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    // spinnerContainer: {
+    //     pos
+    // }
 });
