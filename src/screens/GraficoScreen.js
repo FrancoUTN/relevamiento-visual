@@ -1,244 +1,63 @@
-import { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { addDoc, doc, getDoc, getFirestore, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import moment from 'moment';
-
-import Camara from '../components/camara/Camara';
-import IconButton from '../components/ui/IconButton';
-import { Colores } from '../constants/estilos';
-import refUsuarios from '../util/firestoreUsuarios';
-import refFotos from '../util/firestoreFotos';
-import Publicacion from '../components/ui/Publicacion';
-import LoadingOverlay from '../components/ui/LoadingOverlay';
-
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import {
+    LineChart,
+    BarChart,
+    PieChart,
+    ProgressChart,
+    ContributionGraph,
+    StackedBarChart
+  } from "react-native-chart-kit";
 
 export default function GraficoScreen({ navigation, route }) {
-    const auth = getAuth();
-    const email = auth.currentUser.email;
-    const uid = auth.currentUser.uid;
-    const userRef = doc(getFirestore(), 'usuarios', uid);
-
-    const cosas = route.params?.cosas;
-    const sonLindas = cosas == 'Lindas';
-    const [usuario, setUsuario] = useState();
-    const [fotos, setFotos] = useState([]);
-    const [tomarFoto, setTomarFoto] = useState(false);
-    const [cargando, setCargando] = useState(true);
-
-    useEffect(
-        () => navigation.setOptions({
-            title: cosas,
-            headerStyle: {
-                backgroundColor: sonLindas ? Colores.secundario : Colores.terciario
-            },
-        }),
-    []);
-    
-    useEffect(() => {
-        const unsubscribe = onSnapshot(userRef, doc => {
-            setUsuario(doc.data());
-        });
-        return unsubscribe;
-    }, []);
-
-    useEffect(() => {
-        const q = query(refFotos, orderBy("fecha", 'desc'));
-    
-        const unsubscribe = onSnapshot(q, qs => {
-            setFotos(
-                qs.docs.reduce(
-                    (result, doc) => {
-                        if (doc.data().esLinda === sonLindas) {
-                            result.push({
-                                id: doc.id,
-                                autor: doc.data().autor,
-                                esLinda: doc.data().esLinda,
-                                fecha: doc.data().fecha,
-                                url: doc.data().url,
-                                votos: doc.data().votos
-                            });
-                        }
-                        return result;
-                    }, []
-                )
-            );
-            setCargando(false);
-        });
-        return unsubscribe;
-    }, [])
-
-    async function fotoTomadaHandler(objetoFoto) {
-        setCargando(true);
-        setTomarFoto(false);
-        const storageRef = ref(getStorage(), new Date().toISOString());
-
-        const blob = await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                resolve(xhr.response);
-            };
-            xhr.onerror = function (e) {
-                console.log(e);
-                reject(new TypeError("Network request failed"));
-            };
-            xhr.responseType = "blob";
-            xhr.open("GET", objetoFoto.uri, true);
-            xhr.send(null);
-        });
-
-        await uploadBytes(storageRef, blob);
-
-        const url = await getDownloadURL(storageRef);
-
-        const foto = {
-          autor: email,
-          esLinda: sonLindas ? true : false,
-          fecha: new Date(),
-          url: url,
-          votos: 0
-        }
-
-        addDoc(refFotos, foto);
-    }
-
-    async function onVotarLindaHandler(id) {
-        const masLindaActual = usuario.masLinda;
-
-        if (id != masLindaActual) {
-            const fotoQueGana = doc(getFirestore(), 'fotos', id);
-            const docSnap = await getDoc(fotoQueGana);
-            const votosTraidos = docSnap.data().votos;
-            await updateDoc(fotoQueGana, { votos: votosTraidos + 1});
-        }
-        if (masLindaActual) {
-            const fotoQuePierde = doc(getFirestore(), 'fotos', masLindaActual);
-            const docSnap = await getDoc(fotoQuePierde);
-            const votosTraidos = docSnap.data().votos;
-            await updateDoc(fotoQuePierde, { votos: votosTraidos - 1});
-        }
-
-        let objeto;
-
-        if (id === masLindaActual) {
-            objeto = {
-                masLinda: ''
-            };
-        }
-        else {
-            objeto = {
-                masLinda: id
-            };
-        }
-
-        await updateDoc(userRef, objeto);
-    }
-
-    async function onVotarFeaHandler(id) {
-        const masFeaActual = usuario.masFea;
-
-        if (id != masFeaActual) {
-            const fotoQueGana = doc(getFirestore(), 'fotos', id);
-            const docSnap = await getDoc(fotoQueGana);
-            const votosTraidos = docSnap.data().votos;
-            await updateDoc(fotoQueGana, { votos: votosTraidos + 1});
-        }
-        if (masFeaActual) {
-            const fotoQuePierde = doc(getFirestore(), 'fotos', masFeaActual);
-            const docSnap = await getDoc(fotoQuePierde);
-            const votosTraidos = docSnap.data().votos;
-            await updateDoc(fotoQuePierde, { votos: votosTraidos - 1});
-        }
-
-        let objeto;
-
-        if (id === masFeaActual) {
-            objeto = {
-                masFea: ''
-            };
-        }
-        else {
-            objeto = {
-                masFea: id
-            };
-        }
-
-        await updateDoc(userRef, objeto);
-    }
-
-    function formatDate(timestamp) {
-        const fecha = timestamp.toDate();
-    
-        return moment(fecha).format('D/M/YY k:mma')
-    }
-
-    function renderizarItem({item}) {
-        const fotoVotada = sonLindas ? usuario.masLinda : usuario.masFea;
-
-        return (
-            <Publicacion
-                id={item.id}
-                autor={item.autor}
-                fecha={formatDate(item.fecha)}
-                url={item.url}
-                onVotar={sonLindas ? onVotarLindaHandler : onVotarFeaHandler}
-                votada={item.id === fotoVotada}
-                votos={item.votos}
-            />
-        );
-    }
-
-    const lista = cargando ?    
-        (
-            <LoadingOverlay message={'Cargando...'}/>
-        )
-        :
-        (
-            <FlatList
-                data={fotos}
-                renderItem={renderizarItem}
-                keyExtractor={item => item.id}
-            />
-        );
-
-    const viewTemporal = (
-        <View style={{
-            margin: 10,
-            marginHorizontal: 145,
-            alignItems: 'center',
-            backgroundColor: tomarFoto ? Colores.errorOscuro : Colores.otro,
-            borderRadius: 10
-        }}>
-            <IconButton
-                icon={ tomarFoto ? 'close' : 'camera-outline' }
-                color='white'
-                size={40}
-                onPress={() => setTomarFoto(!tomarFoto) }
-            />
-        </View>
-    )
-
     return (
-        <View style={styles.container}>
-
-            { viewTemporal }
-
-            {
-                tomarFoto ?
-                <Camara
-                    fotoTomada={fotoTomadaHandler}
-                />
-                :
-                lista
-            }
-            
+        <View>
+            <Text>Bezier Line Chart</Text>
+            <LineChart
+                data={{
+                labels: ["January", "February", "March", "April", "May", "June"],
+                datasets: [
+                    {
+                    data: [
+                        Math.random() * 100,
+                        Math.random() * 100,
+                        Math.random() * 100,
+                        Math.random() * 100,
+                        Math.random() * 100,
+                        Math.random() * 100
+                    ]
+                    }
+                ]
+                }}
+                width={Dimensions.get("window").width} // from react-native
+                height={220}
+                yAxisLabel="$"
+                yAxisSuffix="k"
+                yAxisInterval={1} // optional, defaults to 1
+                chartConfig={{
+                backgroundColor: "#e26a00",
+                backgroundGradientFrom: "#fb8c00",
+                backgroundGradientTo: "#ffa726",
+                decimalPlaces: 2, // optional, defaults to 2dp
+                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                style: {
+                    borderRadius: 16
+                },
+                propsForDots: {
+                    r: "6",
+                    strokeWidth: "2",
+                    stroke: "#ffa726"
+                }
+                }}
+                bezier
+                style={{
+                marginVertical: 8,
+                borderRadius: 16
+                }}
+            />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
 });
