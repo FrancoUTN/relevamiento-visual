@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { addDoc, doc, getDoc, getFirestore, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
@@ -14,7 +14,7 @@ import Publicacion from '../components/ui/Publicacion';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 
 
-export default function SeccionScreen({ navigation, route }) {
+export default function GraficoScreen({ navigation, route }) {
     const auth = getAuth();
     const email = auth.currentUser.email;
     const uid = auth.currentUser.uid;
@@ -205,24 +205,11 @@ export default function SeccionScreen({ navigation, route }) {
     const viewTemporal = (
         <View style={{
             margin: 10,
-            paddingHorizontal: 10,
-            // marginHorizontal: 145,
-            alignSelf: 'center',
+            marginHorizontal: 145,
             alignItems: 'center',
             backgroundColor: tomarFoto ? Colores.errorOscuro : Colores.otro,
-            borderRadius: 10,
-            flexDirection: 'row'
+            borderRadius: 10
         }}>
-            {
-                tomarFoto ||
-                <Text style={{
-                    color: 'white',
-                    fontSize: 30,
-                    marginHorizontal: 5
-                }}>
-                    +
-                </Text>
-            }
             <IconButton
                 icon={ tomarFoto ? 'close' : 'camera-outline' }
                 color='white'

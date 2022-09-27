@@ -8,6 +8,8 @@ import ModalScreen from "../../screens/ModalScreen";
 import { Contexto } from '../../store/Contexto';
 import IconButton from '../ui/IconButton';
 import SeccionScreen from '../../screens/SeccionScreen';
+import GraficoScreen from '../../screens/GraficoScreen';
+import { View } from 'react-native';
 // import { Text, View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
@@ -49,6 +51,28 @@ export function AuthenticatedStack() {
       onPress={contexto.logout}
     />
   );
+  const iconos = (
+    <View style={{
+      // flex: 1,
+      flexDirection: 'row',
+      width: 140,
+      justifyContent: 'space-between'
+    }}>
+      <IconButton
+        icon="images-outline"
+        color='white'
+        size={24}
+        onPress={() => console.log("Fotos")}
+      />
+      <IconButton
+        icon="stats-chart"
+        color='white'
+        size={24}
+        onPress={() => console.log("Gráficos")}
+      />
+      { logoutIcon }
+    </View>
+  );
 
   // function funcionHeaderRight () {
   //   return () => (
@@ -85,7 +109,12 @@ export function AuthenticatedStack() {
       <Stack.Screen
         name="Seccion"
         component={SeccionScreen}
-        options={{ headerRight: () => logoutIcon }}
+        options={{ headerRight: () => iconos }}
+      />
+      <Stack.Screen
+        name="Grafico"
+        component={GraficoScreen}
+        options={{ headerRight: () => iconos }}
       />
     </Stack.Navigator>
   );
