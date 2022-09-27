@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { addDoc, doc, getDoc, getFirestore, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
@@ -12,6 +12,7 @@ import refUsuarios from '../util/firestoreUsuarios';
 import refFotos from '../util/firestoreFotos';
 import Publicacion from '../components/ui/Publicacion';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
+import { Contexto } from '../store/Contexto';
 
 
 export default function SeccionScreen({ navigation, route }) {
@@ -19,13 +20,18 @@ export default function SeccionScreen({ navigation, route }) {
     const email = auth.currentUser.email;
     const uid = auth.currentUser.uid;
     const userRef = doc(getFirestore(), 'usuarios', uid);
-
+    const contexto = useContext(Contexto);
+    
     const cosas = route.params?.cosas;
     const sonLindas = cosas == 'Lindas';
     const [usuario, setUsuario] = useState();
     const [fotos, setFotos] = useState([]);
     const [tomarFoto, setTomarFoto] = useState(false);
     const [cargando, setCargando] = useState(true);
+
+    useEffect(
+        () => contexto.elegirSeccion(cosas),
+    []);
 
     useEffect(
         () => navigation.setOptions({

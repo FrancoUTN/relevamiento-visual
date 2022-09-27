@@ -68,7 +68,7 @@ export function AuthenticatedStack() {
         icon="stats-chart"
         color='white'
         size={24}
-        onPress={() => console.log("Gráficos")}
+        onPress={() => console.log(contexto.seccion)}
       />
       { logoutIcon }
     </View>
