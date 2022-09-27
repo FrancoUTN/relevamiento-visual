@@ -51,28 +51,30 @@ export function AuthenticatedStack() {
       onPress={contexto.logout}
     />
   );
-  const iconos = (
-    <View style={{
-      // flex: 1,
-      flexDirection: 'row',
-      width: 140,
-      justifyContent: 'space-between'
-    }}>
-      <IconButton
-        icon="images-outline"
-        color='white'
-        size={24}
-        onPress={() => console.log("Fotos")}
-      />
-      <IconButton
-        icon="stats-chart"
-        color='white'
-        size={24}
-        onPress={() => console.log(contexto.seccion)}
-      />
-      { logoutIcon }
-    </View>
-  );
+
+  const opciones = ({ navigation }) => ({
+    headerRight: () => (
+      <View style={{
+        flexDirection: 'row',
+        width: 140,
+        justifyContent: 'space-between'
+      }}>
+        <IconButton
+          icon="images-outline"
+          color='white'
+          size={24}
+          onPress={() => navigation.navigate('Seccion')}
+        />
+        <IconButton
+          icon="stats-chart"
+          color='white'
+          size={24}
+          onPress={() => navigation.navigate('Grafico')}
+        />
+        { logoutIcon }
+      </View>
+    )
+  })
 
   // function funcionHeaderRight () {
   //   return () => (
@@ -109,12 +111,12 @@ export function AuthenticatedStack() {
       <Stack.Screen
         name="Seccion"
         component={SeccionScreen}
-        options={{ headerRight: () => iconos }}
+        options={opciones}
       />
       <Stack.Screen
         name="Grafico"
         component={GraficoScreen}
-        options={{ headerRight: () => iconos }}
+        options={opciones}
       />
     </Stack.Navigator>
   );
