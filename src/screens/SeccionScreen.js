@@ -15,27 +15,22 @@ import LoadingOverlay from '../components/ui/LoadingOverlay';
 import { Contexto } from '../store/Contexto';
 
 
-export default function SeccionScreen({ navigation, route }) {
+export default function SeccionScreen({ navigation }) {
     const auth = getAuth();
     const email = auth.currentUser.email;
     const uid = auth.currentUser.uid;
     const userRef = doc(getFirestore(), 'usuarios', uid);
     const contexto = useContext(Contexto);
     
-    const cosas = route.params?.cosas;
-    const sonLindas = cosas == 'Lindas';
+    const sonLindas = contexto.seccion == 'Lindas';
     const [usuario, setUsuario] = useState();
     const [fotos, setFotos] = useState([]);
     const [tomarFoto, setTomarFoto] = useState(false);
     const [cargando, setCargando] = useState(true);
 
     useEffect(
-        () => contexto.elegirSeccion(cosas),
-    []);
-
-    useEffect(
         () => navigation.setOptions({
-            title: cosas,
+            title: contexto.seccion,
             headerStyle: {
                 backgroundColor: sonLindas ? Colores.secundario : Colores.terciario
             },

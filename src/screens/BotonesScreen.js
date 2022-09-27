@@ -1,18 +1,22 @@
+import { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import GiantButton from '../components/ui/GiantButton';
 import { Colores } from '../constants/estilos';
+import { Contexto } from '../store/Contexto';
 
 
 export default function BotonesScreen({ navigation }) {
+  const contexto = useContext(Contexto);
 
   function onLindasPressHandler() {
-    navigation.navigate('Seccion', {'cosas': 'Lindas'});
+    contexto.elegirSeccion('Lindas');
+    navigation.navigate('Seccion');
   }
 
   function onFeasPressHandler() {
-    navigation.navigate('Seccion', {'cosas': 'Feas'});
-    
+    contexto.elegirSeccion('Feas');
+    navigation.navigate('Seccion');
   }
 
   return (
