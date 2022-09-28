@@ -1,33 +1,26 @@
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { BarChart, PieChart } from "react-native-chart-kit";
 import { useHeaderHeight } from "@react-navigation/elements"
+import { onSnapshot, orderBy, query } from 'firebase/firestore';
 
 import { Colores } from '../constants/estilos';
-import { useContext, useEffect } from 'react';
 import { Contexto } from '../store/Contexto';
+import refFotos from '../util/firestoreFotos';
+import LoadingOverlay from '../components/ui/LoadingOverlay';
 
 export default function GraficoScreen({ navigation, route }) {
+    // Contexto
     const contexto = useContext(Contexto);
     const sonLindas = contexto.seccion == 'Lindas';
+    // Pantalla
     const screenWidth = Dimensions.get("window").width;
     const screenHeight = Dimensions.get("window").height;
     const screenHeightMenosHeader = screenHeight - useHeaderHeight();
-
-    const data = {
-        labels: [
-            "invitado-28/11/22",
-            "anonimo-28/11/22",
-            "anonimo-28/11/22",
-            "tester-28/11/22",
-            "invitado-28/11/22",
-            "tester-28/11/22"
-        ],
-        datasets: [
-          {
-            data: [1, 2, 0, 4, 2, 0]
-          }
-        ]
-    };
+    // Datos
+    const [labels, setLabels] = useState([]);
+    const [datasetsData, setDatasetsData] = useState([]);
+    const [cargando, setCargando] = useState(true);
 
     const legendFontSize = 14;
     const data2 = [
@@ -80,19 +73,45 @@ export default function GraficoScreen({ navigation, route }) {
         }),
     []);
 
+    useEffect(() => {
+        const q = query(refFotos, orderBy("fecha", 'desc'));    
+        return onSnapshot(q, qs => {
+            const labels = [];
+            const datasetsData = [];
+            qs.docs.forEach(qds => {
+                if (qds.data().esLinda === sonLindas) {
+                    const autor = qds.data().autor;
+                    const votos = qds.data().votos;
+                    
+                    labels.push(autor);
+                    datasetsData.push(votos);
+                }
+            });
+            setLabels(labels);
+            setDatasetsData(datasetsData);
+            setCargando(false);
+        });
+    }, []);
+
+    if (cargando) {
+        return <LoadingOverlay message={"Calculando resultados..."} />
+    }
+
+    const data = {
+        labels: labels,
+        datasets: [{data: datasetsData}]
+    };
+
     return (
         <View style={styles.viewPrincipal}>
             <BarChart
                 data={data}
                 width={screenWidth}
-                // width={200}
                 height={screenHeightMenosHeader}
-                // height={400}
                 chartConfig={chartConfig}
 
                 verticalLabelRotation={90}
                 // style={{
-                //     padding: 5
                 // }}
 
                 // yAxisSuffix={' votos'}
