@@ -62,11 +62,12 @@ export default function GraficoScreen({ navigation, route }) {
     ];
 
     const chartConfig = {
-        // backgroundGradientFrom: "#1E2923",
-        // backgroundGradientFromOpacity: 0,
-        // backgroundGradientTo: "#08130D",
-        // backgroundGradientToOpacity: 0.5,
-        color: () => Colores.primarioClaro,
+        backgroundGradientFrom: Colores.primarioOscuro,
+        // backgroundGradientFromOpacity: 0.9,
+        backgroundGradientTo: Colores.primarioOscuro,
+        // backgroundGradientToOpacity: 1,
+        // color: () => Colores.terciario,
+        color: () => 'white',
         // barPercentage: 1,
     };
 
