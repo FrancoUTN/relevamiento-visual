@@ -11,15 +11,16 @@ export default function GraficoScreen({ navigation, route }) {
 
     const data = {
         labels: [
-            "invitado 28/8/22 - 21:47:04",
-            "anonimo 24/10/21 - 21:47:04",
-            "invitado 28/8/22 - 21:47:04",
-            "anonimo 28/8/22 - 21:47:04",
-            "invitado 28/8/22 - 21:47:04",
-            "anonimo 28/8/22 - 21:47:04"],
+            "invitado-28/11/22",
+            "anonimo-28/11/22",
+            "anonimo-28/11/22",
+            "tester-28/11/22",
+            "invitado-28/11/22",
+            "tester-28/11/22"
+        ],
         datasets: [
           {
-            data: [1, 2, 0, 3, 5, 10]
+            data: [1, 2, 0, 4, 2, 0]
           }
         ]
     };
@@ -71,9 +72,10 @@ export default function GraficoScreen({ navigation, route }) {
                 // height={400}
                 chartConfig={chartConfig}
 
-                verticalLabelRotation={33}
-                style={{
-                }}
+                verticalLabelRotation={90}
+                // style={{
+                //     padding: 5
+                // }}
 
                 // yAxisSuffix={'votos'}
                 // withVerticalLabels={false}
