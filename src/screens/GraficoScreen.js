@@ -10,7 +10,7 @@ import refFotos from '../util/firestoreFotos';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import moment from 'moment';
 
-export default function GraficoScreen({ navigation, route }) {
+export default function GraficoScreen({ navigation }) {
     // Contexto
     const contexto = useContext(Contexto);
     const sonLindas = contexto.seccion == 'Lindas';
@@ -21,46 +21,14 @@ export default function GraficoScreen({ navigation, route }) {
     // Datos
     const [labels, setLabels] = useState([]);
     const [datasetsData, setDatasetsData] = useState([]);
+    const [pieData, setPieData] = useState([]);
     const [cargando, setCargando] = useState(true);
-
-    const legendFontSize = 14;
-    const data2 = [
-        {
-          name: "Seoul",
-          population: 0,
-          color: "rgba(131, 167, 234, 1)",
-          legendFontColor: "#222",
-          legendFontSize
-        },
-        {
-          name: "Toronto",
-          population: 4,
-          color: "#F00",
-          legendFontColor: "#222",
-          legendFontSize
-        },
-        {
-          name: "New York",
-          population: 2,
-          color: "#ffffff",
-          legendFontColor: "#222",
-          legendFontSize
-        },
-        {
-          name: "Moscow",
-          population: 1,
-          color: "rgb(0, 0, 255)",
-          legendFontColor: "#222",
-          legendFontSize
-        }
-    ];
-
+    // Configuración
     const chartConfig = {
         backgroundGradientFrom: Colores.primarioOscuro,
         // backgroundGradientFromOpacity: 0.9,
         backgroundGradientTo: Colores.primarioOscuro,
         // backgroundGradientToOpacity: 1,
-        // color: () => Colores.terciario,
         color: () => 'white',
         // barPercentage: 1,
     };
@@ -79,6 +47,7 @@ export default function GraficoScreen({ navigation, route }) {
         return onSnapshot(q, qs => {
             const labels = [];
             const datasetsData = [];
+            const pieData = [];
             qs.docs.forEach(qds => {
                 if (qds.data().esLinda === sonLindas) {
                     const votos = qds.data().votos;
@@ -86,16 +55,41 @@ export default function GraficoScreen({ navigation, route }) {
                     const autorRecortado = autor.substring(0, 4);
                     const fecha = qds.data().fecha.toDate();
                     const fechaFormateada = moment(fecha).format('D/M/YY-k:mm')
-                    const label = `${autorRecortado}-${fechaFormateada}`;                    
-                    labels.push(label);
-                    datasetsData.push(votos);
+                    const label = `${autorRecortado}-${fechaFormateada}`;
+                    if (sonLindas) {
+                        pieData.push({
+                            name: label,
+                            votos: votos,
+                            color: getRandomColor(),
+                            legendFontColor: "#222",
+                            legendFontSize: 14
+                          });
+                    }
+                    else {
+                        labels.push(label);
+                        datasetsData.push(votos);
+                    }
                 }
             });
-            setLabels(labels);
-            setDatasetsData(datasetsData);
+            if (sonLindas) {
+                setPieData(pieData);
+            }
+            else {
+                setLabels(labels);
+                setDatasetsData(datasetsData);
+            }
             setCargando(false);
         });
     }, []);
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
 
     if (cargando) {
         return <LoadingOverlay message={"Calculando..."} />
@@ -108,6 +102,20 @@ export default function GraficoScreen({ navigation, route }) {
 
     return (
         <View style={styles.viewPrincipal}>
+            {
+            sonLindas ?
+            <PieChart
+                data={pieData}
+                width={screenWidth}
+                height={200}
+                chartConfig={chartConfig}
+                accessor={"votos"}
+                paddingLeft={"-30"}
+                center={[30, 0]}
+                absolute
+                // hasLegend={false}
+            />
+            :
             <BarChart
                 data={data}
                 width={screenWidth}
@@ -117,25 +125,13 @@ export default function GraficoScreen({ navigation, route }) {
                 verticalLabelRotation={90}
                 // style={{
                 // }}
-
                 // yAxisSuffix={' votos'}
                 // withVerticalLabels={false}
                 showBarTops={false}
                 showValuesOnTopOfBars={true}
                 withInnerLines={false}
             />
-            {/* <PieChart
-                data={data2}
-                width={screenWidth}
-                height={200}
-                chartConfig={chartConfig}
-                accessor={"population"}
-                // backgroundColor={"transparent"}
-                // paddingLeft={"50"}
-                // center={[50, 50]}
-                absolute
-                // hasLegend={false}
-            /> */}
+            }
         </View>
     );
 }
@@ -143,5 +139,7 @@ export default function GraficoScreen({ navigation, route }) {
 const styles = StyleSheet.create({
     viewPrincipal: {
         flex: 1,
+        justifyContent: 'center',
+        // backgroundColor: 'gray',
     }
 });
