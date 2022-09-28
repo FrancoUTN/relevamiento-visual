@@ -9,15 +9,17 @@ export default function GraficoScreen({ navigation, route }) {
     const screenHeight = Dimensions.get("window").height;
     const screenHeightMenosHeader = screenHeight - useHeaderHeight();
 
-    const chartConfig = {
-        color: () => Colores.primarioClaro,
-    };
-
     const data = {
-        labels: ["January\nasda", "February", "March", "April", "May", "June"],
+        labels: [
+            "invitado 28/8/22 - 21:47:04",
+            "anonimo 24/10/21 - 21:47:04",
+            "invitado 28/8/22 - 21:47:04",
+            "anonimo 28/8/22 - 21:47:04",
+            "invitado 28/8/22 - 21:47:04",
+            "anonimo 28/8/22 - 21:47:04"],
         datasets: [
           {
-            data: [1, 2, 0, 3, 5, 100]
+            data: [1, 2, 0, 3, 5, 10]
           }
         ]
     };
@@ -54,15 +56,22 @@ export default function GraficoScreen({ navigation, route }) {
         }
     ];
 
+    const chartConfig = {
+        color: () => Colores.primarioClaro,
+        // barPercentage: 1,
+    };
+
     return (
         <View style={styles.viewPrincipal}>
             <BarChart
                 data={data}
                 width={screenWidth}
+                // width={200}
                 height={screenHeightMenosHeader}
+                // height={400}
                 chartConfig={chartConfig}
 
-                verticalLabelRotation={90}
+                verticalLabelRotation={33}
                 style={{
                 }}
 
