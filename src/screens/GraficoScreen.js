@@ -1,18 +1,23 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { BarChart, PieChart } from "react-native-chart-kit";
+import { useHeaderHeight } from "@react-navigation/elements"
+
 import { Colores } from '../constants/estilos';
 
 export default function GraficoScreen({ navigation, route }) {
     const screenWidth = Dimensions.get("window").width;
+    const screenHeight = Dimensions.get("window").height;
+    const screenHeightMenosHeader = screenHeight - useHeaderHeight();
+
     const chartConfig = {
         color: () => Colores.primarioClaro,
     };
 
     const data = {
-        labels: ["January", "February", "March", "April", "May", "June"],
+        labels: ["January\nasda", "February", "March", "April", "May", "June"],
         datasets: [
           {
-            data: [1, 2, 0, 3, 5, 7]
+            data: [1, 2, 0, 3, 5, 100]
           }
         ]
     };
@@ -54,10 +59,20 @@ export default function GraficoScreen({ navigation, route }) {
             <BarChart
                 data={data}
                 width={screenWidth}
-                height={220}
+                height={screenHeightMenosHeader}
                 chartConfig={chartConfig}
+
+                verticalLabelRotation={90}
+                style={{
+                }}
+
+                // yAxisSuffix={'votos'}
+                // withVerticalLabels={false}
+                showBarTops={false}
+                showValuesOnTopOfBars={true}
+                withInnerLines={false}
             />
-            <PieChart
+            {/* <PieChart
                 data={data2}
                 width={screenWidth}
                 height={200}
@@ -68,7 +83,7 @@ export default function GraficoScreen({ navigation, route }) {
                 // center={[50, 50]}
                 absolute
                 // hasLegend={false}
-            />
+            /> */}
         </View>
     );
 }
