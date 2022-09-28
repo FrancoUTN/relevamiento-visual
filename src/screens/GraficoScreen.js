@@ -3,8 +3,12 @@ import { BarChart, PieChart } from "react-native-chart-kit";
 import { useHeaderHeight } from "@react-navigation/elements"
 
 import { Colores } from '../constants/estilos';
+import { useContext, useEffect } from 'react';
+import { Contexto } from '../store/Contexto';
 
 export default function GraficoScreen({ navigation, route }) {
+    const contexto = useContext(Contexto);
+    const sonLindas = contexto.seccion == 'Lindas';
     const screenWidth = Dimensions.get("window").width;
     const screenHeight = Dimensions.get("window").height;
     const screenHeightMenosHeader = screenHeight - useHeaderHeight();
@@ -58,9 +62,22 @@ export default function GraficoScreen({ navigation, route }) {
     ];
 
     const chartConfig = {
+        // backgroundGradientFrom: "#1E2923",
+        // backgroundGradientFromOpacity: 0,
+        // backgroundGradientTo: "#08130D",
+        // backgroundGradientToOpacity: 0.5,
         color: () => Colores.primarioClaro,
         // barPercentage: 1,
     };
+
+    useEffect(
+        () => navigation.setOptions({
+            title: 'Resultados',
+            headerStyle: {
+                backgroundColor: sonLindas ? Colores.secundario : Colores.terciario
+            },
+        }),
+    []);
 
     return (
         <View style={styles.viewPrincipal}>
@@ -77,7 +94,7 @@ export default function GraficoScreen({ navigation, route }) {
                 //     padding: 5
                 // }}
 
-                // yAxisSuffix={'votos'}
+                // yAxisSuffix={' votos'}
                 // withVerticalLabels={false}
                 showBarTops={false}
                 showValuesOnTopOfBars={true}
