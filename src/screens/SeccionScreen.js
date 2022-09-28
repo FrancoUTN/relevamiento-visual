@@ -171,7 +171,7 @@ export default function SeccionScreen({ navigation }) {
     function formatDate(timestamp) {
         const fecha = timestamp.toDate();
     
-        return moment(fecha).format('D/M/YY k:mma')
+        return moment(fecha).format('D/M/YY - k:mm')
     }
 
     function renderizarItem({item}) {

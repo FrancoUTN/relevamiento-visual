@@ -8,6 +8,7 @@ import { Colores } from '../constants/estilos';
 import { Contexto } from '../store/Contexto';
 import refFotos from '../util/firestoreFotos';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
+import moment from 'moment';
 
 export default function GraficoScreen({ navigation, route }) {
     // Contexto
@@ -80,10 +81,13 @@ export default function GraficoScreen({ navigation, route }) {
             const datasetsData = [];
             qs.docs.forEach(qds => {
                 if (qds.data().esLinda === sonLindas) {
-                    const autor = qds.data().autor;
                     const votos = qds.data().votos;
-                    
-                    labels.push(autor);
+                    const autor = qds.data().autor;
+                    const autorRecortado = autor.substring(0, 4);
+                    const fecha = qds.data().fecha.toDate();
+                    const fechaFormateada = moment(fecha).format('D/M/YY-k:mm')
+                    const label = `${autorRecortado}-${fechaFormateada}`;                    
+                    labels.push(label);
                     datasetsData.push(votos);
                 }
             });
@@ -94,7 +98,7 @@ export default function GraficoScreen({ navigation, route }) {
     }, []);
 
     if (cargando) {
-        return <LoadingOverlay message={"Calculando resultados..."} />
+        return <LoadingOverlay message={"Calculando..."} />
     }
 
     const data = {
