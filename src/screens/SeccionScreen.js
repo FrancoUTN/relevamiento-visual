@@ -105,35 +105,50 @@ export default function SeccionScreen({ navigation }) {
     }
 
     async function onVotarLindaHandler(id) {
-        const masLindaActual = usuario.masLinda;
-
-        if (id != masLindaActual) {
-            const fotoQueGana = doc(getFirestore(), 'fotos', id);
-            const docSnap = await getDoc(fotoQueGana);
-            const votosTraidos = docSnap.data().votos;
-            await updateDoc(fotoQueGana, { votos: votosTraidos + 1});
-        }
-        if (masLindaActual) {
-            const fotoQuePierde = doc(getFirestore(), 'fotos', masLindaActual);
-            const docSnap = await getDoc(fotoQuePierde);
-            const votosTraidos = docSnap.data().votos;
-            await updateDoc(fotoQuePierde, { votos: votosTraidos - 1});
-        }
-
-        let objeto;
-
-        if (id === masLindaActual) {
-            objeto = {
-                masLinda: ''
-            };
+        let nuevoArray = [];
+        if (usuario.masLindas) {
+            nuevoArray = usuario.masLindas.slice();
+            const indiceDeLaFoto = usuario.masLindas.indexOf(id);
+            if (indiceDeLaFoto === -1) {
+                nuevoArray.push(id);
+            }
+            else {
+                nuevoArray.splice(indiceDeLaFoto, 1);
+            }
         }
         else {
-            objeto = {
-                masLinda: id
-            };
+            nuevoArray.push(id);
         }
+        const usuarioModificado = {
+            masLindas: nuevoArray,
+        }
+        await updateDoc(userRef, usuarioModificado);
 
-        await updateDoc(userRef, objeto);
+        // const masLindaActual = usuario.masLinda;
+        // if (id != masLindaActual) {
+        //     const fotoQueGana = doc(getFirestore(), 'fotos', id);
+        //     const docSnap = await getDoc(fotoQueGana);
+        //     const votosTraidos = docSnap.data().votos;
+        //     await updateDoc(fotoQueGana, { votos: votosTraidos + 1});
+        // }
+        // if (masLindaActual) {
+        //     const fotoQuePierde = doc(getFirestore(), 'fotos', masLindaActual);
+        //     const docSnap = await getDoc(fotoQuePierde);
+        //     const votosTraidos = docSnap.data().votos;
+        //     await updateDoc(fotoQuePierde, { votos: votosTraidos - 1});
+        // }
+        // let objeto;
+        // if (id === masLindaActual) {
+        //     objeto = {
+        //         masLinda: ''
+        //     };
+        // }
+        // else {
+        //     objeto = {
+        //         masLinda: id
+        //     };
+        // }
+        // await updateDoc(userRef, objeto);
     }
 
     async function onVotarFeaHandler(id) {
@@ -175,8 +190,15 @@ export default function SeccionScreen({ navigation }) {
     }
 
     function renderizarItem({item}) {
-        const fotoVotada = sonLindas ? usuario.masLinda : usuario.masFea;
-
+        let fotoVotada = false;
+        if (sonLindas) {
+            if (usuario.masLindas?.includes(item.id)) {
+                fotoVotada = true;
+            }
+        }
+        else if (usuario.masFeas?.includes(item.id)) {
+            fotoVotada = true;
+        }
         return (
             <Publicacion
                 id={item.id}
@@ -184,7 +206,7 @@ export default function SeccionScreen({ navigation }) {
                 fecha={formatDate(item.fecha)}
                 url={item.url}
                 onVotar={sonLindas ? onVotarLindaHandler : onVotarFeaHandler}
-                votada={item.id === fotoVotada}
+                votada={fotoVotada}
                 votos={item.votos}
             />
         );
