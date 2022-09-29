@@ -7,5 +7,6 @@ export const Colores = {
   errorClaro: '#EE8434',
   errorOscuro: '#880D1E',
   voto: '#FFD166',
-  otro: '#688E26'
+  otro: '#688E26',
+  gris: '#C6C5B9'
 }

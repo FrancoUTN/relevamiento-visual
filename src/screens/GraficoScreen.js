@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { BarChart, PieChart } from "react-native-chart-kit";
 import { useHeaderHeight } from "@react-navigation/elements"
 import { onSnapshot, orderBy, query } from 'firebase/firestore';
@@ -61,7 +61,7 @@ export default function GraficoScreen({ navigation }) {
                             name: label,
                             votos: votos,
                             color: getRandomColor(),
-                            legendFontColor: "#222",
+                            legendFontColor: Colores.primarioOscuro,
                             legendFontSize: 14
                           });
                     }
@@ -104,17 +104,28 @@ export default function GraficoScreen({ navigation }) {
         <View style={styles.viewPrincipal}>
             {
             sonLindas ?
-            <PieChart
-                data={pieData}
-                width={screenWidth}
-                height={200}
-                chartConfig={chartConfig}
-                accessor={"votos"}
-                paddingLeft={"-30"}
-                center={[30, 0]}
-                absolute
-                // hasLegend={false}
-            />
+            <>
+                <Image
+                    source={require('../../assets/house2.png')}
+                    style={styles.imagenLindas}
+                />
+                <Text style={styles.textoLindas}>
+                    Las fotos
+                    <Text style={styles.subTextoLindas}> más lindas </Text>
+                    del edificio:
+                </Text>
+                <PieChart
+                    data={pieData}
+                    width={screenWidth}
+                    height={200}
+                    chartConfig={chartConfig}
+                    accessor={"votos"}
+                    paddingLeft={"-30"}
+                    center={[30, 0]}
+                    absolute
+                    // hasLegend={false}
+                />
+            </>
             :
             <BarChart
                 data={data}
@@ -140,6 +151,21 @@ const styles = StyleSheet.create({
     viewPrincipal: {
         flex: 1,
         justifyContent: 'center',
-        // backgroundColor: 'gray',
+        alignItems: 'center',
+        backgroundColor: Colores.gris,
+    },
+    textoLindas: {
+        color: Colores.primarioOscuro,
+        fontSize: 28,
+        textAlign: 'center',
+        marginVertical: 30,
+        marginHorizontal: 50
+    },
+    subTextoLindas: {
+        fontWeight: 'bold'
+    },
+    imagenLindas: {
+        height: 120,
+        resizeMode: 'contain',
     }
 });
