@@ -105,6 +105,10 @@ export default function SeccionScreen({ navigation }) {
     }
 
     async function onVotarLindaHandler(id) {
+        const foto = doc(getFirestore(), 'fotos', id);
+        const docSnaphotDeFoto = await getDoc(foto);
+        const votosTraidos = docSnaphotDeFoto.data().votos;
+        let booleanSumar = true;
         let nuevoArray = [];
         if (usuario.masLindas) {
             nuevoArray = usuario.masLindas.slice();
@@ -114,6 +118,7 @@ export default function SeccionScreen({ navigation }) {
             }
             else {
                 nuevoArray.splice(indiceDeLaFoto, 1);
+                booleanSumar = false;
             }
         }
         else {
@@ -123,64 +128,40 @@ export default function SeccionScreen({ navigation }) {
             masLindas: nuevoArray,
         }
         await updateDoc(userRef, usuarioModificado);
-
-        // const masLindaActual = usuario.masLinda;
-        // if (id != masLindaActual) {
-        //     const fotoQueGana = doc(getFirestore(), 'fotos', id);
-        //     const docSnap = await getDoc(fotoQueGana);
-        //     const votosTraidos = docSnap.data().votos;
-        //     await updateDoc(fotoQueGana, { votos: votosTraidos + 1});
-        // }
-        // if (masLindaActual) {
-        //     const fotoQuePierde = doc(getFirestore(), 'fotos', masLindaActual);
-        //     const docSnap = await getDoc(fotoQuePierde);
-        //     const votosTraidos = docSnap.data().votos;
-        //     await updateDoc(fotoQuePierde, { votos: votosTraidos - 1});
-        // }
-        // let objeto;
-        // if (id === masLindaActual) {
-        //     objeto = {
-        //         masLinda: ''
-        //     };
-        // }
-        // else {
-        //     objeto = {
-        //         masLinda: id
-        //     };
-        // }
-        // await updateDoc(userRef, objeto);
+        if (booleanSumar)
+            await updateDoc(foto, { votos: votosTraidos + 1});
+        else
+            await updateDoc(foto, { votos: votosTraidos - 1});
     }
 
     async function onVotarFeaHandler(id) {
-        const masFeaActual = usuario.masFea;
-
-        if (id != masFeaActual) {
-            const fotoQueGana = doc(getFirestore(), 'fotos', id);
-            const docSnap = await getDoc(fotoQueGana);
-            const votosTraidos = docSnap.data().votos;
-            await updateDoc(fotoQueGana, { votos: votosTraidos + 1});
-        }
-        if (masFeaActual) {
-            const fotoQuePierde = doc(getFirestore(), 'fotos', masFeaActual);
-            const docSnap = await getDoc(fotoQuePierde);
-            const votosTraidos = docSnap.data().votos;
-            await updateDoc(fotoQuePierde, { votos: votosTraidos - 1});
-        }
-
-        let objeto;
-
-        if (id === masFeaActual) {
-            objeto = {
-                masFea: ''
-            };
+        const foto = doc(getFirestore(), 'fotos', id);
+        const docSnaphotDeFoto = await getDoc(foto);
+        const votosTraidos = docSnaphotDeFoto.data().votos;
+        let booleanSumar = true;
+        let nuevoArray = [];
+        if (usuario.masFeas) {
+            nuevoArray = usuario.masFeas.slice();
+            const indiceDeLaFoto = usuario.masFeas.indexOf(id);
+            if (indiceDeLaFoto === -1) {
+                nuevoArray.push(id);
+            }
+            else {
+                nuevoArray.splice(indiceDeLaFoto, 1);
+                booleanSumar = false;
+            }
         }
         else {
-            objeto = {
-                masFea: id
-            };
+            nuevoArray.push(id);
         }
-
-        await updateDoc(userRef, objeto);
+        const usuarioModificado = {
+            masFeas: nuevoArray,
+        }
+        await updateDoc(userRef, usuarioModificado);
+        if (booleanSumar)
+            await updateDoc(foto, { votos: votosTraidos + 1});
+        else
+            await updateDoc(foto, { votos: votosTraidos - 1});
     }
 
     function formatDate(timestamp) {
