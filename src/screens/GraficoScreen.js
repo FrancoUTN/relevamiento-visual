@@ -25,12 +25,13 @@ export default function GraficoScreen({ navigation }) {
     const [cargando, setCargando] = useState(true);
     // Configuración
     const chartConfig = {
-        backgroundGradientFrom: Colores.primarioOscuro,
-        // backgroundGradientFromOpacity: 0.9,
-        backgroundGradientTo: Colores.primarioOscuro,
-        // backgroundGradientToOpacity: 1,
-        color: () => 'white',
-        // barPercentage: 1,
+        backgroundGradientFrom: Colores.primarioClaro,
+        backgroundGradientFromOpacity: .9,
+        backgroundGradientTo: Colores.gris,
+        // backgroundGradientToOpacity: .8,
+        fillShadowGradientFromOpacity: .5,
+        fillShadowGradientToOpacity: .8,
+        color: () => Colores.primarioOscuro
     };
 
     useEffect(
@@ -138,8 +139,8 @@ export default function GraficoScreen({ navigation }) {
                 // }}
                 // yAxisSuffix={' votos'}
                 // withVerticalLabels={false}
-                showBarTops={false}
-                showValuesOnTopOfBars={true}
+                // showBarTops={false}
+                // showValuesOnTopOfBars={true}
                 withInnerLines={false}
             />
             }

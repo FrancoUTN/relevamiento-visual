@@ -4,7 +4,7 @@ export const Colores = {
   primarioOscuro: '#2A2E45',
   secundario: '#EC0868',
   terciario: '#7C7F65',
-  errorClaro: '#EE8434',
+  errorClaro: '#EF8354',
   errorOscuro: '#880D1E',
   voto: '#FFD166',
   otro: '#688E26',
