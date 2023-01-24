@@ -2,7 +2,7 @@
   "expo": {
     "name": "relevamiento-visual",
     "slug": "relevamiento-visual",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -25,14 +25,14 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0000AA"
       },
-      "package": "com.maxiterra.relevamientovisual"
+      "package": "com.cfrancodev.relevamientovisual"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "906364df-5d31-4dc9-b4e9-9e8a7e84d1ac"
+        "projectId": "1b4db9c7-a94a-4f1c-a3d0-08d9c368619d"
       }
     }
   }
