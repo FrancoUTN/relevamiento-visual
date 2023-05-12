@@ -25,7 +25,7 @@ Los resultados se muestran en gráficos de torta (para las _lindas_) y de barra 
 </p>
 <br/>
 
-## ¿Cómo funciona?
+## :page_facing_up: ¿Cómo funciona?
 
 Con [React Native](https://reactnative.dev/); usando [Firebase](https://firebase.google.com) para la administración de usuarios, fotos y votos.
 
@@ -41,6 +41,6 @@ Tampoco hay comentarios, solamente votos.
 <br/>
 <br/>
 
-## :arrow_down: Descargar
+## :stars: Links
 
-[Conseguila para Android](https://expo.dev/accounts/cfrancodev/projects/relevamiento-visual/builds/3c51a87a-c70c-4b9e-98b0-1f1210750054) y comenzá a visibilizar el arte (y los desmanes) de tus vecinos de edificio.
+[Conseguí el APK](https://expo.dev/accounts/cfrancodev/projects/relevamiento-visual/builds/1dbffd39-15e9-4662-b612-25c54cbe3d2f) para Android o, simplemente, [probala con Expo Go](https://expo.dev/%40cfrancodev/relevamiento-visual?serviceType=eas&distribution=expo-go&scheme=exp%2Brelevamiento-visual&channel=principal&sdkVersion=48.0.0) (disponible en Android y iOS).
