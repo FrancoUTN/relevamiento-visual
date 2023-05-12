@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Animated, Image, StyleSheet, View } from "react-native";
-import Constants from "expo-constants";
+// import Constants from "expo-constants"; // Parece romper en SDK 46
 import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -38,7 +38,7 @@ export default function AnimatedSplashScreen({ children, icono, texto }) {
           style={[
             StyleSheet.absoluteFill,
             {
-              backgroundColor: Constants.manifest.splash.backgroundColor,
+              backgroundColor: "#2A2E45",
             },
           ]}
         >

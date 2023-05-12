@@ -26,7 +26,7 @@ export function AuthStack() {
       <Stack.Screen
         name="Login"
         component={LoginScreen}
-        options={{ title: 'Inicia sesión' }}
+        options={{ title: 'Iniciar sesión' }}
       />
       <Stack.Group screenOptions={{
           presentation: 'modal',
