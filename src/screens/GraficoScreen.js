@@ -28,7 +28,6 @@ export default function GraficoScreen({ navigation }) {
         backgroundGradientFrom: Colores.primarioClaro,
         backgroundGradientFromOpacity: .9,
         backgroundGradientTo: Colores.gris,
-        // backgroundGradientToOpacity: .8,
         fillShadowGradientFromOpacity: .5,
         fillShadowGradientToOpacity: .8,
         color: () => Colores.primarioOscuro
